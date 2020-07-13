@@ -32,6 +32,7 @@
         <a-tree
           v-model="checkedKeys"
           checkable
+          checkStrictly
           :auto-expand-parent="autoExpandParent"
           :expanded-keys="expandedKeys"
           :tree-data="orgTreeData"
