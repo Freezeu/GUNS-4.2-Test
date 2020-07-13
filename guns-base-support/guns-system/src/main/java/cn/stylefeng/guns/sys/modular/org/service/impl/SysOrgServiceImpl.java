@@ -159,14 +159,20 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         //获取父id
         Long pid = sysOrgParam.getPid();
         boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
-        //如果登录用户不是超级管理员，且新增的机构父id不是0，则进行数据权限校验
-        if (!superAdmin && !pid.equals(0L)) {
-            List<Long> dataScope = sysOrgParam.getDataScope();
-            //数据范围为空
-            if (ObjectUtil.isEmpty(dataScope)) {
-                throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(pid)) {
-                //所添加的组织机构的父机构不在自己的数据范围内
+        //如果登录用户不是超级管理员
+        if (!superAdmin) {
+            //如果新增的机构父id不是0，则进行数据权限校验
+            if(!pid.equals(0L)) {
+                List<Long> dataScope = sysOrgParam.getDataScope();
+                //数据范围为空
+                if (ObjectUtil.isEmpty(dataScope)) {
+                    throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
+                } else if(!dataScope.contains(pid)) {
+                    //所添加的组织机构的父机构不在自己的数据范围内
+                    throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
+                }
+            } else {
+                //如果新增的机构父id是0，则根本没权限，只有超级管理员能添加父id为0的节点
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
         }
