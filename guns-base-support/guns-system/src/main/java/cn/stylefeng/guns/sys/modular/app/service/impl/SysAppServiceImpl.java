@@ -22,6 +22,7 @@ import cn.stylefeng.guns.sys.modular.user.service.SysUserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -206,6 +207,7 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
      * @author xuyuxiang
      * @date 2020/6/29 16:50
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void setAsDefault(SysAppParam sysAppParam) {
         SysApp currentApp = this.querySysApp(sysAppParam);
