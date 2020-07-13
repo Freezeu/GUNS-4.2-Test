@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.sys.modular.role.controller;
 
 import cn.stylefeng.guns.core.annotion.BusinessLog;
+import cn.stylefeng.guns.core.annotion.DataScope;
 import cn.stylefeng.guns.core.annotion.Permission;
 import cn.stylefeng.guns.core.enums.LogAnnotionOpTypeEnum;
 import cn.stylefeng.guns.core.pojo.response.ResponseData;
@@ -129,6 +130,7 @@ public class SysRoleController {
      * @date 2020/3/28 16:05
      */
     @Permission
+    @DataScope
     @PostMapping("/sysRole/grantData")
     @BusinessLog(title = "系统角色_授权数据", opType = LogAnnotionOpTypeEnum.GRANT)
     public ResponseData grantData(@RequestBody @Validated(SysRoleParam.grantData.class) SysRoleParam sysRoleParam) {

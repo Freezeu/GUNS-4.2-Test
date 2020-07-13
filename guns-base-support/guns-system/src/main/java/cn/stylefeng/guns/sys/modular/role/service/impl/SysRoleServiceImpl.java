@@ -4,14 +4,18 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
+import cn.stylefeng.guns.core.annotion.DataScope;
 import cn.stylefeng.guns.core.consts.CommonConstant;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
 import cn.stylefeng.guns.core.context.login.LoginContextHolder;
 import cn.stylefeng.guns.core.enums.CommonStatusEnum;
+import cn.stylefeng.guns.core.exception.PermissionException;
+import cn.stylefeng.guns.core.exception.enums.PermissionExceptionEnum;
 import cn.stylefeng.guns.sys.core.enums.DataScopeTypeEnum;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.factory.PageFactory;
 import cn.stylefeng.guns.core.pojo.page.PageResult;
+import cn.stylefeng.guns.sys.modular.emp.result.SysEmpInfo;
 import cn.stylefeng.guns.sys.modular.org.service.SysOrgService;
 import cn.stylefeng.guns.sys.modular.role.entity.SysRole;
 import cn.stylefeng.guns.sys.modular.role.enums.SysRoleExceptionEnum;
@@ -27,6 +31,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Set;
 
@@ -263,6 +271,30 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void grantData(SysRoleParam sysRoleParam) {
         SysRole sysRole = this.querySysRole(sysRoleParam);
+        boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
+        //如果登录用户不是超级管理员，则进行数据权限校验
+        if (!superAdmin) {
+            Integer dataScopeType = sysRoleParam.getDataScopeType();
+            //如果授权的角色的数据范围类型为全部，则没权限，只有超级管理员有
+            if(DataScopeTypeEnum.ALL.getCode().equals(dataScopeType)) {
+                throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
+            }
+            //如果授权的角色数据范围类型为自定义，则要判断授权的数据范围是否在自己的数据范围内
+            if(DataScopeTypeEnum.DEFINE.getCode().equals(dataScopeType)){
+                List<Long> dataScope = sysRoleParam.getDataScope();
+                //要授权的数据范围列表
+                List<Long> grantOrgIdList = sysRoleParam.getGrantOrgIdList();
+                if(ObjectUtil.isNotEmpty(grantOrgIdList)) {
+                    //数据范围为空
+                    if (ObjectUtil.isEmpty(dataScope)) {
+                        throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
+                    } else if(!dataScope.containsAll(grantOrgIdList)) {
+                        //所要授权的数据不在自己的数据范围内
+                        throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
+                    }
+                }
+            }
+        }
         sysRole.setDataScopeType(sysRoleParam.getDataScopeType());
         this.updateById(sysRole);
         sysRoleDataScopeService.grantDataScope(sysRoleParam);
