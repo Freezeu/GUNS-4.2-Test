@@ -126,8 +126,19 @@
        */
       getOrgTree(){
         getOrgTree().then((res) => {
-          this.orgTree=res.data
           this.formLoading = false
+          if(!res.success){
+            this.orgTree=[]
+            return
+          }
+          this.orgTree=[{
+            "id": "-1",
+            "parentId": "0",
+            "title": "顶级",
+            "value": "0",
+            "pid": "0",
+            "children":res.data
+          }]
         })
       },
 

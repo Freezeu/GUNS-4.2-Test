@@ -366,7 +366,6 @@
         return getAppList().then((res) => {
           if (res.success) {
             this.appData=res.data
-              //this.form.getFieldDecorator('application',{initialValue:this.appData[0].code,initialName:this.appData[0].name})
           } else {
             this.$message.warning(res.message)
           }
@@ -376,7 +375,14 @@
         getMenuTree({'application':value}).then((res) => {
           if (res.success) {
             this.form.resetFields(`pid`,[]);
-            this.menuTreeData=res.data
+            this.menuTreeData=[{
+              "id": "-1",
+              "parentId": "0",
+              "title": "顶级",
+              "value": "0",
+              "pid": "0",
+              "children":res.data
+            }]
           } else {
             this.$message.warning(res.message)
           }

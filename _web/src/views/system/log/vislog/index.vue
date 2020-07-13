@@ -115,10 +115,6 @@
             dataIndex: 'browser'
           },
           {
-            title: '请求地址',
-            dataIndex: 'location'
-          },
-          {
             title: '访问时间',
             dataIndex: 'visTime'
           },
