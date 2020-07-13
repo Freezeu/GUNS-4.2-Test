@@ -76,7 +76,7 @@
             <a-popconfirm v-if="hasPerm('sysFileInfo:delete')" placement="topRight" title="确认删除？" @confirm="() => sysFileInfoDelete(record)">
                   <a>删除</a>
             </a-popconfirm>
-            <a-divider type="vertical" v-if="(hasPerm('sysFileInfo:preview') & record.fileSuffix === 'png' || record.fileSuffix === 'jpg'|| record.fileSuffix === 'gif'|| record.fileSuffix === 'tif' || record.fileSuffix === 'bmp' ) & hasPerm('sysFileInfo:delete')"/>
+            <a-divider type="vertical" v-if="(hasPerm('sysFileInfo:preview') & record.fileSuffix === 'png' || record.fileSuffix === 'jpeg' || record.fileSuffix === 'jpg'|| record.fileSuffix === 'gif'|| record.fileSuffix === 'tif' || record.fileSuffix === 'bmp' ) & hasPerm('sysFileInfo:delete')"/>
             <a v-if="(hasPerm('sysFileInfo:preview') & record.fileSuffix === 'png' || record.fileSuffix === 'jpg'|| record.fileSuffix === 'gif'|| record.fileSuffix === 'tif' || record.fileSuffix === 'bmp' )" @click="$refs.previewForm.preview(record)">预览</a>
           </span>
 
