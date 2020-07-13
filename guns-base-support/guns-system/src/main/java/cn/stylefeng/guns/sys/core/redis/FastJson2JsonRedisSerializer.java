@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
  */
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     static {
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);

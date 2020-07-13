@@ -32,7 +32,7 @@ public class LogManager {
     /**
      * 异步操作记录日志的线程池
      */
-    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10, new ScheduledExecutorFactoryBean());
+    private static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(10, new ScheduledExecutorFactoryBean());
 
     private LogManager() {
     }
@@ -58,7 +58,7 @@ public class LogManager {
 
         //日志记录操作延时
         int operateDelayTime = 10;
-        executor.schedule(task, operateDelayTime, TimeUnit.MILLISECONDS);
+        EXECUTOR.schedule(task, operateDelayTime, TimeUnit.MILLISECONDS);
     }
 
     /**

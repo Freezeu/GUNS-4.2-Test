@@ -43,11 +43,6 @@ import java.util.Map;
 @Service
 public class AuthServiceImpl implements AuthService, UserDetailsService {
 
-    /**
-     * 默认登录有效时间 2小时
-     */
-    private static final Long LOGIN_EXPIRED_HOURS = 2L;
-
     @Resource
     private SysUserService sysUserService;
 

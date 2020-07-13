@@ -20,11 +20,11 @@ import java.util.TimerTask;
  */
 public class LogTaskFactory {
 
-    private static Log log = Log.get();
+    private static final Log log = Log.get();
 
-    private static SysVisLogService sysVisLogService = SpringUtil.getBean(SysVisLogService.class);
+    private static final SysVisLogService sysVisLogService = SpringUtil.getBean(SysVisLogService.class);
 
-    private static SysOpLogService sysOpLogService = SpringUtil.getBean(SysOpLogService.class);
+    private static final SysOpLogService sysOpLogService = SpringUtil.getBean(SysOpLogService.class);
 
     /**
      * 登录日志

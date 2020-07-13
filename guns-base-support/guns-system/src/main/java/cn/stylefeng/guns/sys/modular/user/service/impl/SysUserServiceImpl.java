@@ -312,8 +312,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         //更新枚举，更新只能更新未删除状态的
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .eq(SysUser::getId, id)
+        updateWrapper.eq(SysUser::getId, id)
                 .and(i -> i.ne(SysUser::getStatus, CommonStatusEnum.DELETED.getCode()))
                 .set(SysUser::getStatus, status);
         boolean update = this.update(updateWrapper);

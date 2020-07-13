@@ -150,8 +150,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
 
         //更新枚举，更新只能更新未删除状态的
         LambdaUpdateWrapper<SysDictType> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper
-                .eq(SysDictType::getId, id)
+        updateWrapper.eq(SysDictType::getId, id)
                 .and(i -> i.ne(SysDictType::getStatus, CommonStatusEnum.DELETED.getCode()))
                 .set(SysDictType::getStatus, status);
         boolean update = this.update(updateWrapper);

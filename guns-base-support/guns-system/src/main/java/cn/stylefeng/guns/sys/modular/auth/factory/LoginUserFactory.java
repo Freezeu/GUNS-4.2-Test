@@ -30,15 +30,15 @@ import java.util.List;
  */
 public class LoginUserFactory {
 
-    private static SysUserService sysUserService = SpringUtil.getBean(SysUserService.class);
+    private static final SysUserService sysUserService = SpringUtil.getBean(SysUserService.class);
 
-    private static SysEmpService sysEmpService = SpringUtil.getBean(SysEmpService.class);
+    private static final SysEmpService sysEmpService = SpringUtil.getBean(SysEmpService.class);
 
-    private static SysAppService sysAppService = SpringUtil.getBean(SysAppService.class);
+    private static final SysAppService sysAppService = SpringUtil.getBean(SysAppService.class);
 
-    private static SysMenuService sysMenuService = SpringUtil.getBean(SysMenuService.class);
+    private static final SysMenuService sysMenuService = SpringUtil.getBean(SysMenuService.class);
 
-    private static SysRoleService sysRoleService = SpringUtil.getBean(SysRoleService.class);
+    private static final SysRoleService sysRoleService = SpringUtil.getBean(SysRoleService.class);
 
     /**
      * 填充登录用户相关信息

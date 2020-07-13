@@ -146,11 +146,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             mateItem.setTitle(sysMenu.getName());
             mateItem.setLink(sysMenu.getLink());
             //是否可见
-            if (YesOrNotEnum.N.getCode().equals(sysMenu.getVisible())) {
-                mateItem.setShow(false);
-            } else {
-                mateItem.setShow(true);
-            }
+            mateItem.setShow(!YesOrNotEnum.N.getCode().equals(sysMenu.getVisible()));
             //设置的首页，默认打开此链接
             loginMenuTreeNode.setRedirect(sysMenu.getRedirect());
             //是否是外链
