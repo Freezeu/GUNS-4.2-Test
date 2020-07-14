@@ -20,7 +20,6 @@ import './components/global.less'
 import { Dialog } from '@/components'
 
 import { hasBtnPermission } from './utils/permissions' // button permission
-import { baseServer} from './utils/baseServerUrl'
 import { sysApplication } from './utils/applocation'
 
 Vue.config.productionTip = false
@@ -30,7 +29,6 @@ Vue.use(VueAxios)
 Vue.use(Dialog)
 Vue.prototype.hasPerm = hasBtnPermission
 Vue.prototype.applocation = sysApplication
-Vue.prototype.baseServer = baseServer
 
 new Vue({
   router,
