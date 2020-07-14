@@ -162,6 +162,7 @@
       },
       onCheck(checkedKeys) {
         this.checkedKeys = checkedKeys;
+        console.log(JSON.stringify(checkedKeys))
       },
       onSelect(selectedKeys, info) {
         this.selectedKeys = selectedKeys;
@@ -172,7 +173,7 @@
         this.confirmLoading = true
         validateFields((errors, values) => {
           if (!errors) {
-            sysRoleGrantData({id:this.roleEntity.id,grantOrgIdList:this.checkedKeys,dataScopeType:values.dataScopeType}).then((res) => {
+            sysRoleGrantData({id:this.roleEntity.id,grantOrgIdList:this.checkedKeys.checked,dataScopeType:values.dataScopeType}).then((res) => {
               if(res.success){
                 this.$message.success('授权成功')
                 this.confirmLoading = false

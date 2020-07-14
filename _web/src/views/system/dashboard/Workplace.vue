@@ -110,141 +110,318 @@
 </template>
 
 <script>
-import { timeFix } from '@/utils/util'
-import { mapState } from 'vuex'
+  import { timeFix } from '@/utils/util'
+  import { mapState } from 'vuex'
 
-import { PageView } from '@/layouts'
-import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
+  import { PageView } from '@/layouts'
+  import HeadInfo from '@/components/tools/HeadInfo'
+  import { Radar } from '@/components'
 
-import { getRoleList, getServiceList } from '@/api/manage'
+  import { getRoleList, getServiceList } from '@/api/manage'
 
-const DataSet = require('@antv/data-set')
+  const DataSet = require('@antv/data-set')
 
-export default {
-  name: 'Workplace',
-  components: {
-    PageView,
-    HeadInfo,
-    Radar
-  },
-  data () {
-    return {
-      timeFix: timeFix(),
-      avatar: '',
-      user: {},
+  export default {
+    name: 'Workplace',
+    components: {
+      PageView,
+      HeadInfo,
+      Radar
+    },
+    data () {
+      return {
+        timeFix: timeFix(),
+        avatar: '',
+        user: {},
 
-      projects: [],
-      loading: true,
-      radarLoading: true,
-      activities: [],
-      teams: [],
+        projects: [],
+        loading: true,
+        radarLoading: true,
+        activities: [],
+        teams: [],
 
-      // data
-      axis1Opts: {
-        dataKey: 'item',
-        line: null,
-        tickLine: null,
-        grid: {
-          lineStyle: {
-            lineDash: null
-          },
-          hideFirstLine: false
-        }
-      },
-      axis2Opts: {
-        dataKey: 'score',
-        line: null,
-        tickLine: null,
-        grid: {
-          type: 'polygon',
-          lineStyle: {
-            lineDash: null
+        // data
+        axis1Opts: {
+          dataKey: 'item',
+          line: null,
+          tickLine: null,
+          grid: {
+            lineStyle: {
+              lineDash: null
+            },
+            hideFirstLine: false
           }
-        }
+        },
+        axis2Opts: {
+          dataKey: 'score',
+          line: null,
+          tickLine: null,
+          grid: {
+            type: 'polygon',
+            lineStyle: {
+              lineDash: null
+            }
+          }
+        },
+        scale: [{
+          dataKey: 'score',
+          min: 0,
+          max: 80
+        }],
+        axisData: [
+          { item: '引用', a: 70, b: 30, c: 40 },
+          { item: '口碑', a: 60, b: 70, c: 40 },
+          { item: '产量', a: 50, b: 60, c: 40 },
+          { item: '贡献', a: 40, b: 50, c: 40 },
+          { item: '热度', a: 60, b: 70, c: 40 },
+          { item: '引用', a: 70, b: 50, c: 40 }
+        ],
+        radarData: []
+      }
+    },
+    computed: {
+      ...mapState({
+        nickname: (state) => state.user.nickname,
+        welcome: (state) => state.user.welcome
+      }),
+      userInfo () {
+        return this.$store.getters.userInfo
+      }
+    },
+    created () {
+      this.user = this.userInfo
+      this.avatar = this.userInfo.avatar
+
+      getRoleList().then(res => {
+        // console.log('workplace -> call getRoleList()', res)
+      })
+
+      getServiceList().then(res => {
+        // console.log('workplace -> call getServiceList()', res)
+      })
+    },
+    mounted () {
+      this.getProjects()
+      this.getActivity()
+      this.getTeams()
+      this.initRadar()
+    },
+    methods: {
+      getProjects () {
+        this.projects =[{
+          id: 1,
+          cover: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
+          title: 'Alipay',
+          description: '那是一种内在的东西， 他们到达不了，也无法触及的',
+          status: 1,
+          updatedAt: '2018-07-26 00:00:00'
+        },
+          {
+            id: 2,
+            cover: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
+            title: 'Angular',
+            description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+            status: 1,
+            updatedAt: '2018-07-26 00:00:00'
+          },
+          {
+            id: 3,
+            cover: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
+            title: 'Ant Design',
+            description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
+            status: 1,
+            updatedAt: '2018-07-26 00:00:00'
+          },
+          {
+            id: 4,
+            cover: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
+            title: 'Guns',
+            description: '那时候我只会想自己想要什么，从不想自己拥有什么',
+            status: 1,
+            updatedAt: '2018-07-26 00:00:00'
+          },
+          {
+            id: 5,
+            cover: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
+            title: 'Bootstrap',
+            description: '凛冬将至',
+            status: 1,
+            updatedAt: '2018-07-26 00:00:00'
+          },
+          {
+            id: 6,
+            cover: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
+            title: 'Vue',
+            description: '生命就像一盒巧克力，结果往往出人意料',
+            status: 1,
+            updatedAt: '2018-07-26 00:00:00'
+          }
+        ]
+        this.loading = false
       },
-      scale: [{
-        dataKey: 'score',
-        min: 0,
-        max: 80
-      }],
-      axisData: [
-        { item: '引用', a: 70, b: 30, c: 40 },
-        { item: '口碑', a: 60, b: 70, c: 40 },
-        { item: '产量', a: 50, b: 60, c: 40 },
-        { item: '贡献', a: 40, b: 50, c: 40 },
-        { item: '热度', a: 60, b: 70, c: 40 },
-        { item: '引用', a: 70, b: 50, c: 40 }
-      ],
-      radarData: []
-    }
-  },
-  computed: {
-    ...mapState({
-      nickname: (state) => state.user.nickname,
-      welcome: (state) => state.user.welcome
-    }),
-    userInfo () {
-      return this.$store.getters.userInfo
-    }
-  },
-  created () {
-    this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+      getActivity () {
+        this.activities = [{
+          id: 1,
+          user: {
+            nickname: '@name',
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+          },
+          project: {
+            name: '白鹭酱油开发组',
+            action: '更新',
+            event: '番组计划'
+          },
+          time: '2018-08-23 14:47:00'
+        },
+          {
+            id: 1,
+            user: {
+              nickname: '蓝莓酱',
+              avatar: 'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png'
+            },
+            project: {
+              name: '白鹭酱油开发组',
+              action: '更新',
+              event: '番组计划'
+            },
+            time: '2018-08-23 09:35:37'
+          },
+          {
+            id: 1,
+            user: {
+              nickname: '@name',
+              avatar: '@image(64x64)'
+            },
+            project: {
+              name: '白鹭酱油开发组',
+              action: '创建',
+              event: '番组计划'
+            },
+            time: '2017-05-27 00:00:00'
+          },
+          {
+            id: 1,
+            user: {
+              nickname: '曲丽丽',
+              avatar: '@image(64x64)'
+            },
+            project: {
+              name: '高逼格设计天团',
+              action: '更新',
+              event: '六月迭代'
+            },
+            time: '2018-08-23 14:47:00'
+          },
+          {
+            id: 1,
+            user: {
+              nickname: '@name',
+              avatar: '@image(64x64)'
+            },
+            project: {
+              name: '高逼格设计天团',
+              action: 'created',
+              event: '六月迭代'
+            },
+            time: '2018-08-23 14:47:00'
+          },
+          {
+            id: 1,
+            user: {
+              nickname: '曲丽丽',
+              avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+            },
+            project: {
+              name: '高逼格设计天团',
+              action: 'created',
+              event: '六月迭代'
+            },
+            time: '2018-08-23 14:47:00'
+          }
+        ]
+      },
+      getTeams () {
+        this.teams = [{
+          id: 1,
+          name: '科学搬砖组',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+        },
+          {
+            id: 2,
+            name: '程序员日常',
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/cnrhVkzwxjPwAaCfPbdc.png'
+          },
+          {
+            id: 1,
+            name: '设计天团',
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png'
+          },
+          {
+            id: 1,
+            name: '中二少女团',
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png'
+          },
+          {
+            id: 1,
+            name: '骗你学计算机',
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png'
+          }
+        ]
 
-    getRoleList().then(res => {
-      // console.log('workplace -> call getRoleList()', res)
-    })
+      },
+      initRadar () {
+        this.radarLoading = true
+        const dv = new DataSet.View().source(
+          [{
+            item: '引用',
+            '个人': 70,
+            '团队': 30,
+            '部门': 40
+          },
+            {
+              item: '口碑',
+              '个人': 60,
+              '团队': 70,
+              '部门': 40
+            },
+            {
+              item: '产量',
+              '个人': 50,
+              '团队': 60,
+              '部门': 40
+            },
+            {
+              item: '贡献',
+              '个人': 40,
+              '团队': 50,
+              '部门': 40
+            },
+            {
+              item: '热度',
+              '个人': 60,
+              '团队': 70,
+              '部门': 40
+            },
+            {
+              item: '引用',
+              '个人': 70,
+              '团队': 50,
+              '部门': 40
+            }
+          ]
+        )
+        dv.transform({
+          type: 'fold',
+          fields: ['个人', '团队', '部门'],
+          key: 'user',
+          value: 'score'
+        })
 
-    getServiceList().then(res => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
-  },
-  mounted () {
-    this.getProjects()
-    this.getActivity()
-    this.getTeams()
-    this.initRadar()
-  },
-  methods: {
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
-          this.loading = false
-        })
-    },
-    getActivity () {
-      this.$http.get('/workplace/activity')
-        .then(res => {
-          this.activities = res.result
-        })
-    },
-    getTeams () {
-      this.$http.get('/workplace/teams')
-        .then(res => {
-          this.teams = res.result
-        })
-    },
-    initRadar () {
-      this.radarLoading = true
-
-      this.$http.get('/workplace/radar')
-        .then(res => {
-          const dv = new DataSet.View().source(res.result)
-          dv.transform({
-            type: 'fold',
-            fields: ['个人', '团队', '部门'],
-            key: 'user',
-            value: 'score'
-          })
-
-          this.radarData = dv.rows
-          this.radarLoading = false
-        })
+        this.radarData = dv.rows
+        this.radarLoading = false
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>

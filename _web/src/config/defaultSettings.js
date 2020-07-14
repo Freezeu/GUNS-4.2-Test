@@ -10,6 +10,7 @@
  * contentWidth - 内容区布局： 流式 |  固定
  *
  * storageOptions: {} - Vue-ls 插件配置项 (localStorage/sessionStorage)
+ * production: 变量暂先设定为 false，目的是各种环境都正常显示设置抽屉，真实环境请放开注释
  *
  */
 
@@ -23,7 +24,7 @@ export default {
   autoHideHeader: false, //  auto hide header
   colorWeak: false,
   multiTab: false,
-  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+  production: false,//process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {
     namespace: 'pro__', // key prefix
