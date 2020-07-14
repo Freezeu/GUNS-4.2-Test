@@ -38,7 +38,8 @@
 
 准备以下环境：
 1. npm，jdk1.8，maven 3.6或以上版本。
-2. 您的IDE需要安装lombok插件。
+2. 需要准备一个mysql 5.7数据库。
+3. 您的IDE需要安装lombok插件。
 
 前端运行：
 1. cd _web/
