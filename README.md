@@ -46,7 +46,7 @@
 3. npm run serve
 
 后端运行：
-1. 将数据库文件_sql/guns-separation.sql导入到数据库，注意修改sys_config表中参数
+1. 将数据库文件_sql/guns-separation.sql导入到数据库
 2. 修改guns-main/src/main/resources/application-local.yml文件，修改为您的数据库ip，账号和密码
 3. 运行guns-main/src/main/java/cn/stylefeng/guns/GunsApplication类，即可启动后端程序
 
