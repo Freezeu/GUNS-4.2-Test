@@ -54,12 +54,6 @@ public class SysOnlineUserServiceImpl implements SysOnlineUserService {
     @Resource
     private UserCache userCache;
 
-    /**
-     * 系统在线用户列表
-     *
-     * @author xuyuxiang
-     * @date 2020/4/7 17:10
-     */
     @Override
     public List<SysOnlineUserResult> list(SysOnlineUserParam sysOnlineUserParam) {
         List<SysOnlineUserResult> resultList = CollectionUtil.newArrayList();
@@ -75,12 +69,6 @@ public class SysOnlineUserServiceImpl implements SysOnlineUserService {
         return resultList;
     }
 
-    /**
-     * 系统在线用户强退
-     *
-     * @author xuyuxiang
-     * @date 2020/4/7 20:21
-     */
     @Override
     public void forceExist(SysOnlineUserParam sysOnlineUserParam) {
         Boolean demoEnvFlag = ConstantContextHolder.getDemoEnvFlag();

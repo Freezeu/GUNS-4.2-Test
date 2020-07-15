@@ -70,23 +70,17 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     @Resource
     private SysUserService sysUserService;
 
-    /**
-     * 查询系统通知公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 17:23
-     */
     @Override
     public PageResult<SysNotice> page(SysNoticeParam sysNoticeParam) {
         LambdaQueryWrapper<SysNotice> queryWrapper = new LambdaQueryWrapper<>();
-        if(ObjectUtil.isNotNull(sysNoticeParam)) {
+        if (ObjectUtil.isNotNull(sysNoticeParam)) {
             //根据标题或内容模糊查询
-            if(ObjectUtil.isNotEmpty(sysNoticeParam.getSearchValue())) {
+            if (ObjectUtil.isNotEmpty(sysNoticeParam.getSearchValue())) {
                 queryWrapper.like(SysNotice::getTitle, sysNoticeParam.getSearchValue())
                         .or().like(SysNotice::getContent, sysNoticeParam.getSearchValue());
             }
             //根据类型查询
-            if(ObjectUtil.isNotEmpty(sysNoticeParam.getType())) {
+            if (ObjectUtil.isNotEmpty(sysNoticeParam.getType())) {
                 queryWrapper.eq(SysNotice::getType, sysNoticeParam.getType());
             }
         }
@@ -95,12 +89,6 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         return new PageResult<>(this.page(PageFactory.defaultPage(), queryWrapper));
     }
 
-    /**
-     * 添加系统通知公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 17:23
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(SysNoticeParam sysNoticeParam) {
@@ -114,7 +102,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         sysNotice.setPublicOrgId(sysLoginUser.getLoginEmpInfo().getOrgId());
         sysNotice.setPublicOrgName(sysLoginUser.getLoginEmpInfo().getOrgName());
         //如果是发布，则设置发布时间
-        if(NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
+        if (NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
             sysNotice.setPublicTime(new Date());
         }
         this.save(sysNotice);
@@ -124,29 +112,17 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         sysNoticeUserService.add(sysNotice.getId(), noticeUserIdList, noticeUserStatus);
     }
 
-    /**
-     * 删除系统通知公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 17:23
-     */
     @Override
     public void delete(SysNoticeParam sysNoticeParam) {
         SysNotice sysNotice = this.querySysNotice(sysNoticeParam);
         Integer status = sysNotice.getStatus();
-        if(!NoticeStatusEnum.DRAFT.getCode().equals(status) && !NoticeStatusEnum.CANCEL.getCode().equals(status)) {
+        if (!NoticeStatusEnum.DRAFT.getCode().equals(status) && !NoticeStatusEnum.CANCEL.getCode().equals(status)) {
             throw new ServiceException(SysNoticeExceptionEnum.NOTICE_CANNOT_DELETE);
         }
         sysNotice.setStatus(NoticeStatusEnum.DELETED.getCode());
         this.updateById(sysNotice);
     }
 
-    /**
-     * 编辑系统通知公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 17:23
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysNoticeParam sysNoticeParam) {
@@ -155,12 +131,12 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         checkParam(sysNoticeParam, true);
         //非草稿状态
         Integer status = sysNotice.getStatus();
-        if(!NoticeStatusEnum.DRAFT.getCode().equals(status)) {
+        if (!NoticeStatusEnum.DRAFT.getCode().equals(status)) {
             throw new ServiceException(SysNoticeExceptionEnum.NOTICE_CANNOT_EDIT);
         }
         BeanUtil.copyProperties(sysNoticeParam, sysNotice);
         //如果是发布，则设置发布时间
-        if(NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
+        if (NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
             sysNotice.setPublicTime(new Date());
         }
         this.updateById(sysNotice);
@@ -170,12 +146,6 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         sysNoticeUserService.edit(sysNotice.getId(), noticeUserIdList, noticeUserStatus);
     }
 
-    /**
-     * 查看系统通知公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 17:23
-     */
     @Override
     public SysNoticeDetailResult detail(SysNoticeParam sysNoticeParam) {
         SysNotice sysNotice = this.querySysNotice(sysNoticeParam);
@@ -186,7 +156,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         List<Dict> noticeUserReadInfoList = CollectionUtil.newArrayList();
         SysNoticeDetailResult sysNoticeResult = new SysNoticeDetailResult();
         BeanUtil.copyProperties(sysNotice, sysNoticeResult);
-        if(ObjectUtil.isNotEmpty(sysNoticeUserList)) {
+        if (ObjectUtil.isNotEmpty(sysNoticeUserList)) {
             sysNoticeUserList.forEach(sysNoticeUser -> {
                 //遍历通知到的用户，并构造
                 noticeUserIdList.add(sysNoticeUser.getUserId());
@@ -201,11 +171,48 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
         sysNoticeResult.setNoticeUserIdList(noticeUserIdList);
         sysNoticeResult.setNoticeUserReadInfoList(noticeUserReadInfoList);
         //如果该条通知公告为已发布，则将当前用户的该条通知公告设置为已读
-        if(sysNotice.getStatus().equals(NoticeStatusEnum.PUBLIC.getCode())) {
+        if (sysNotice.getStatus().equals(NoticeStatusEnum.PUBLIC.getCode())) {
             sysNoticeUserService.read(sysNotice.getId(),
                     LoginContextHolder.me().getSysLoginUserId(), NoticeUserStatusEnum.READ.getCode());
         }
         return sysNoticeResult;
+    }
+
+    @Override
+    public void changeStatus(SysNoticeParam sysNoticeParam) {
+        SysNotice sysNotice = this.querySysNotice(sysNoticeParam);
+        //校验参数，检查状态是否正确
+        checkParam(sysNoticeParam, false);
+        sysNotice.setStatus(sysNoticeParam.getStatus());
+        //如果是撤回，则设置撤回时间
+        if (NoticeStatusEnum.CANCEL.getCode().equals(sysNotice.getStatus())) {
+            sysNotice.setCancelTime(new Date());
+        } else if (NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
+            //如果是发布，则设置发布时间
+            sysNotice.setPublicTime(new Date());
+        }
+        this.updateById(sysNotice);
+    }
+
+    @Override
+    public PageResult<SysNoticeReceiveResult> received(SysNoticeParam sysNoticeParam) {
+        QueryWrapper<SysNoticeReceiveResult> queryWrapper = new QueryWrapper<>();
+        //查询当前用户的
+        queryWrapper.eq("sys_notice_user.user_id", LoginContextHolder.me().getSysLoginUserId());
+        if (ObjectUtil.isNotNull(sysNoticeParam)) {
+            //根据标题或内容模糊查询
+            if (ObjectUtil.isNotEmpty(sysNoticeParam.getSearchValue())) {
+                queryWrapper.like("sys_notice.title", sysNoticeParam.getSearchValue())
+                        .or().like("sys_notice.content", sysNoticeParam.getSearchValue());
+            }
+            //根据类型查询
+            if (ObjectUtil.isNotEmpty(sysNoticeParam.getType())) {
+                queryWrapper.eq("sys_notice.type", sysNoticeParam.getType());
+            }
+        }
+        //查询未删除的
+        queryWrapper.ne("sys_notice.status", NoticeStatusEnum.DELETED.getCode());
+        return new PageResult<>(this.baseMapper.page(PageFactory.defaultPage(), queryWrapper));
     }
 
     /**
@@ -217,14 +224,14 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     private void checkParam(SysNoticeParam sysNoticeParam, boolean isAddOrEdit) {
         //保存或编辑时，传递的状态参数应为草稿，或发布
         Integer status = sysNoticeParam.getStatus();
-        if(isAddOrEdit) {
-            if(!NoticeStatusEnum.DRAFT.getCode().equals(status) &&
+        if (isAddOrEdit) {
+            if (!NoticeStatusEnum.DRAFT.getCode().equals(status) &&
                     !NoticeStatusEnum.PUBLIC.getCode().equals(status)) {
                 throw new ServiceException(SysNoticeExceptionEnum.NOTICE_STATUS_ERROR);
             }
         } else {
             //修改状态时，传递的状态参数应为撤回或删除或发布
-            if(!NoticeStatusEnum.CANCEL.getCode().equals(status) &&
+            if (!NoticeStatusEnum.CANCEL.getCode().equals(status) &&
                     !NoticeStatusEnum.DELETED.getCode().equals(status) &&
                     !NoticeStatusEnum.PUBLIC.getCode().equals(status)) {
                 throw new ServiceException(SysNoticeExceptionEnum.NOTICE_STATUS_ERROR);
@@ -241,58 +248,10 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
      */
     private SysNotice querySysNotice(SysNoticeParam sysNoticeParam) {
         SysNotice sysNotice = this.getById(sysNoticeParam.getId());
-        if(ObjectUtil.isNull(sysNotice)) {
+        if (ObjectUtil.isNull(sysNotice)) {
             throw new ServiceException(SysNoticeExceptionEnum.NOTICE_NOT_EXIST);
         }
         return sysNotice;
     }
 
-    /**
-     * 修改状态
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 9:45
-     */
-    @Override
-    public void changeStatus(SysNoticeParam sysNoticeParam) {
-        SysNotice sysNotice = this.querySysNotice(sysNoticeParam);
-        //校验参数，检查状态是否正确
-        checkParam(sysNoticeParam, false);
-        sysNotice.setStatus(sysNoticeParam.getStatus());
-        //如果是撤回，则设置撤回时间
-        if(NoticeStatusEnum.CANCEL.getCode().equals(sysNotice.getStatus())) {
-            sysNotice.setCancelTime(new Date());
-        } else if(NoticeStatusEnum.PUBLIC.getCode().equals(sysNotice.getStatus())) {
-            //如果是发布，则设置发布时间
-            sysNotice.setPublicTime(new Date());
-        }
-        this.updateById(sysNotice);
-    }
-
-    /**
-     * 查询当前登陆用户已收公告
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 12:13
-     */
-    @Override
-    public PageResult<SysNoticeReceiveResult> received(SysNoticeParam sysNoticeParam) {
-        QueryWrapper<SysNoticeReceiveResult> queryWrapper = new QueryWrapper<>();
-        //查询当前用户的
-        queryWrapper.eq("sys_notice_user.user_id", LoginContextHolder.me().getSysLoginUserId());
-        if(ObjectUtil.isNotNull(sysNoticeParam)) {
-            //根据标题或内容模糊查询
-            if(ObjectUtil.isNotEmpty(sysNoticeParam.getSearchValue())) {
-                queryWrapper.like("sys_notice.title", sysNoticeParam.getSearchValue())
-                        .or().like("sys_notice.content", sysNoticeParam.getSearchValue());
-            }
-            //根据类型查询
-            if(ObjectUtil.isNotEmpty(sysNoticeParam.getType())) {
-                queryWrapper.eq("sys_notice.type", sysNoticeParam.getType());
-            }
-        }
-        //查询未删除的
-        queryWrapper.ne("sys_notice.status", NoticeStatusEnum.DELETED.getCode());
-        return new PageResult<>(this.baseMapper.page(PageFactory.defaultPage(), queryWrapper));
-    }
 }

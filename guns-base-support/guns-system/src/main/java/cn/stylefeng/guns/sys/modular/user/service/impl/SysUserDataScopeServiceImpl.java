@@ -45,12 +45,6 @@ import java.util.List;
 public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMapper, SysUserDataScope>
         implements SysUserDataScopeService {
 
-    /**
-     * 授权数据
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:58
-     */
     @Override
     public void grantData(SysUserParam sysUserParam) {
         Long userId = sysUserParam.getId();
@@ -67,12 +61,6 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
         });
     }
 
-    /**
-     * 获取用户的数据范围id集合
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 17:28
-     */
     @Override
     public List<Long> getUserDataScopeIdList(Long uerId) {
         List<Long> userDataScopeIdList = CollectionUtil.newArrayList();
@@ -82,12 +70,6 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
         return userDataScopeIdList;
     }
 
-    /**
-     * 根据机构id集合删除对应的用户-数据范围关联信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:15
-     */
     @Override
     public void deleteUserDataScopeListByOrgIdList(List<Long> orgIdList) {
         LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();
@@ -95,12 +77,6 @@ public class SysUserDataScopeServiceImpl extends ServiceImpl<SysUserDataScopeMap
         this.remove(queryWrapper);
     }
 
-    /**
-     * 根据用户id删除对应的用户-数据范围关联信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:54
-     */
     @Override
     public void deleteUserDataScopeListByUserId(Long userId) {
         LambdaQueryWrapper<SysUserDataScope> queryWrapper = new LambdaQueryWrapper<>();

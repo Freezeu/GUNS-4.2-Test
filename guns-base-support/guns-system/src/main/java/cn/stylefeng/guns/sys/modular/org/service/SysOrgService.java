@@ -29,6 +29,7 @@ import cn.stylefeng.guns.core.pojo.page.PageResult;
 import cn.stylefeng.guns.sys.modular.org.entity.SysOrg;
 import cn.stylefeng.guns.sys.modular.org.param.SysOrgParam;
 import com.baomidou.mybatisplus.extension.service.IService;
+
 import java.util.List;
 
 /**
@@ -110,7 +111,7 @@ public interface SysOrgService extends IService<SysOrg> {
      * 根据数据范围类型获取当前登录用户的数据范围id集合
      *
      * @param dataScopeType 数据范围类型（1全部数据 2本部门及以下数据 3本部门数据 4仅本人数据）
-     * @param orgId 组织机构id
+     * @param orgId         组织机构id
      * @return 数据范围id集合
      * @author xuyuxiang
      * @date 2020/4/5 18:29

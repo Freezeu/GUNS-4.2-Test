@@ -73,12 +73,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     @Resource
     private UserCache userCache;
 
-    /**
-     * 账号密码登录
-     *
-     * @author xuyuxiang
-     * @date 2020/3/11 16:59
-     */
     @Override
     public String login(String account, String password) {
 
@@ -116,12 +110,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         return this.doLogin(sysUser);
     }
 
-    /**
-     * 根据请求头获取token，存在可能为空的情况
-     *
-     * @author xuyuxiang
-     * @date 2020/3/13 11:49
-     */
     @Override
     public String getTokenFromRequest(HttpServletRequest request) {
         String authToken = request.getHeader(CommonConstant.AUTHORIZATION);
@@ -142,12 +130,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         return authToken;
     }
 
-    /**
-     * 根据token获取当前登录用户信息
-     *
-     * @author xuyuxiang
-     * @date 2020/3/13 12:00
-     */
     @Override
     public SysLoginUser getLoginUserByToken(String token) {
 
@@ -175,33 +157,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         return sysLoginUser;
     }
 
-    /**
-     * 校验token，错误则抛异常
-     *
-     * @author xuyuxiang
-     * @date 2020/3/19 19:15
-     */
-    @Override
-    public void checkToken(String token) {
-        //校验token是否正确
-        Boolean tokenCorrect = JwtTokenUtil.checkToken(token);
-        if (!tokenCorrect) {
-            throw new AuthException(AuthExceptionEnum.REQUEST_TOKEN_ERROR);
-        }
-
-        //校验token是否失效
-        Boolean tokenExpired = JwtTokenUtil.isTokenExpired(token);
-        if (tokenExpired) {
-            throw new AuthException(AuthExceptionEnum.LOGIN_EXPIRED);
-        }
-    }
-
-    /**
-     * 退出登录
-     *
-     * @author xuyuxiang, fengshuonan
-     * @date 2020/3/16 15:05
-     */
     @Override
     public void logout() {
 
@@ -230,6 +185,44 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         } else {
             throw new ServiceException(ServerExceptionEnum.REQUEST_EMPTY);
         }
+    }
+
+    @Override
+    public void setSpringSecurityContextAuthentication(SysLoginUser sysLoginUser) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        sysLoginUser,
+                        null,
+                        sysLoginUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
+    @Override
+    public Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    @Override
+    public void checkToken(String token) {
+        //校验token是否正确
+        Boolean tokenCorrect = JwtTokenUtil.checkToken(token);
+        if (!tokenCorrect) {
+            throw new AuthException(AuthExceptionEnum.REQUEST_TOKEN_ERROR);
+        }
+
+        //校验token是否失效
+        Boolean tokenExpired = JwtTokenUtil.isTokenExpired(token);
+        if (tokenExpired) {
+            throw new AuthException(AuthExceptionEnum.LOGIN_EXPIRED);
+        }
+    }
+
+    @Override
+    public SysLoginUser loadUserByUsername(String account) throws UsernameNotFoundException {
+        SysLoginUser sysLoginUser = new SysLoginUser();
+        SysUser user = sysUserService.getUserByCount(account);
+        BeanUtil.copyProperties(user, sysLoginUser);
+        return sysLoginUser;
     }
 
     /**
@@ -316,33 +309,6 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     }
 
     /**
-     * 设置SpringSecurityContext上下文，方便获取用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/19 19:58
-     */
-    @Override
-    public void setSpringSecurityContextAuthentication(SysLoginUser sysLoginUser) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        sysLoginUser,
-                        null,
-                        sysLoginUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-    }
-
-    /**
-     * 获取SpringSecurityContext中认证信息
-     *
-     * @author xuyuxiang
-     * @date 2020/3/19 20:04
-     */
-    @Override
-    public Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    /**
      * 构造登录用户信息
      *
      * @author xuyuxiang
@@ -364,19 +330,5 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     private void cacheLoginUser(JwtPayLoad jwtPayLoad, SysLoginUser sysLoginUser) {
         String redisLoginUserKey = jwtPayLoad.getUuid();
         userCache.put(redisLoginUserKey, sysLoginUser);
-    }
-
-    /**
-     * 根据用户名获取用户
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 16:04
-     */
-    @Override
-    public SysLoginUser loadUserByUsername(String account) throws UsernameNotFoundException {
-        SysLoginUser sysLoginUser = new SysLoginUser();
-        SysUser user = sysUserService.getUserByCount(account);
-        BeanUtil.copyProperties(user, sysLoginUser);
-        return sysLoginUser;
     }
 }

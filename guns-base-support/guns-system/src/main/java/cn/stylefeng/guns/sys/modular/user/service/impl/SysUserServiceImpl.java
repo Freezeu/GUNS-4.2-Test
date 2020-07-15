@@ -87,12 +87,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysFileInfoService sysFileInfoService;
 
-    /**
-     * 根据账号获取用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/11 17:51
-     */
     @Override
     public SysUser getUserByCount(String account) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
@@ -100,33 +94,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return this.getOne(queryWrapper);
     }
 
-    /**
-     * 查询系统用户
-     *
-     * @author xuyuxiang yubaoshan
-     * @date 2020/3/23 9:37
-     */
     @Override
     public PageResult<SysUserResult> page(SysUserParam sysUserParam) {
         QueryWrapper<SysUserResult> queryWrapper = new QueryWrapper<>();
-        if(ObjectUtil.isNotNull(sysUserParam)) {
+        if (ObjectUtil.isNotNull(sysUserParam)) {
             //根据关键字模糊查询（姓名，账号，手机号）
-            if(ObjectUtil.isNotEmpty(sysUserParam.getSearchValue())) {
+            if (ObjectUtil.isNotEmpty(sysUserParam.getSearchValue())) {
                 queryWrapper.like("sys_user.account", sysUserParam.getSearchValue())
                         .or().like("sys_user.name", sysUserParam.getSearchValue())
                         .or().like("sys_user.phone", sysUserParam.getSearchValue());
             }
             //根据员工所属机构查询
-            if(ObjectUtil.isNotEmpty(sysUserParam.getSysEmpParam())) {
+            if (ObjectUtil.isNotEmpty(sysUserParam.getSysEmpParam())) {
                 SysEmpParam sysEmpParam = sysUserParam.getSysEmpParam();
-                if(ObjectUtil.isNotEmpty(sysEmpParam.getOrgId())) {
+                if (ObjectUtil.isNotEmpty(sysEmpParam.getOrgId())) {
                     //查询属于该机构的，或该机构下级所有的人员
                     queryWrapper.eq("sys_emp.org_id", sysEmpParam.getOrgId())
                             .or().like("sys_org.pids", sysEmpParam.getOrgId());
                 }
             }
             //根据状态查询（0正常 1停用），删除的不会展示在列表
-            if(ObjectUtil.isNotEmpty(sysUserParam.getSearchStatus())) {
+            if (ObjectUtil.isNotEmpty(sysUserParam.getSearchStatus())) {
                 queryWrapper.eq("sys_user.status", sysUserParam.getSearchStatus());
             }
         }
@@ -136,9 +124,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         //如果是超级管理员则获取所有用户，否则只获取其数据范围的用户
         boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
-        if(!superAdmin) {
+        if (!superAdmin) {
             List<Long> dataScope = sysUserParam.getDataScope();
-            if(ObjectUtil.isEmpty(dataScope)) {
+            if (ObjectUtil.isEmpty(dataScope)) {
                 return new PageResult<>(new Page<>());
             } else {
                 Set<Long> dataScopeSet = CollectionUtil.newHashSet(dataScope);
@@ -148,20 +136,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return new PageResult<>(this.baseMapper.page(PageFactory.defaultPage(), queryWrapper));
     }
 
-    /**
-     * 根据用户账号模糊搜索系统用户列表
-     *
-     * @author xuyuxiang
-     * @date 2020/4/14 9:22
-     */
     @Override
     public List<Dict> list(SysUserParam sysUserParam) {
         List<Dict> dictList = CollectionUtil.newArrayList();
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        if(ObjectUtil.isNotNull(sysUserParam)) {
+        if (ObjectUtil.isNotNull(sysUserParam)) {
             //根据账号，姓名模糊查询
-            if(ObjectUtil.isNotEmpty(sysUserParam.getAccount())) {
-                queryWrapper.and(i ->i.like(SysUser::getAccount, sysUserParam.getAccount())
+            if (ObjectUtil.isNotEmpty(sysUserParam.getAccount())) {
+                queryWrapper.and(i -> i.like(SysUser::getAccount, sysUserParam.getAccount())
                         .or().like(SysUser::getName, sysUserParam.getAccount()));
             }
         }
@@ -178,12 +160,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return dictList;
     }
 
-    /**
-     * 增加系统用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/23 9:37
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void add(SysUserParam sysUserParam) {
@@ -197,7 +173,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(orgId)) {
+            } else if (!dataScope.contains(orgId)) {
                 //所添加的用户的所属机构不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -213,18 +189,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysEmpService.addOrUpdate(sysEmpParam);
     }
 
-    /**
-     * 删除系统用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/23 9:37
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         //不能删除超级管理员
-        if(AdminTypeEnum.SUPER_ADMIN.getCode().equals(sysUser.getAdminType())) {
+        if (AdminTypeEnum.SUPER_ADMIN.getCode().equals(sysUser.getAdminType())) {
             throw new ServiceException(SysUserExceptionEnum.USER_CAN_NOT_DELETE_ADMIN);
         }
         boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
@@ -237,7 +207,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(orgId)) {
+            } else if (!dataScope.contains(orgId)) {
                 //所要删除的用户的所属机构不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -255,12 +225,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserDataScopeService.deleteUserDataScopeListByUserId(id);
     }
 
-    /**
-     * 编辑系统用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/23 9:37
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysUserParam sysUserParam) {
@@ -275,7 +239,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(orgId)) {
+            } else if (!dataScope.contains(orgId)) {
                 //所要编辑的用户的所属机构不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -295,12 +259,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysEmpService.addOrUpdate(sysEmpParam);
     }
 
-    /**
-     * 查看系统用户
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 9:52
-     */
     @Override
     public SysUserResult detail(SysUserParam sysUserParam) {
         SysUserResult sysUserResult = new SysUserResult();
@@ -314,17 +272,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return sysUserResult;
     }
 
-    /**
-     * 修改状态
-     *
-     * @author xuyuxiang
-     * @date 2020/5/25 14:34
-     */
     @Override
     public void changeStatus(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         //不能修改超级管理员状态
-        if(AdminTypeEnum.SUPER_ADMIN.getCode().equals(sysUser.getAdminType())) {
+        if (AdminTypeEnum.SUPER_ADMIN.getCode().equals(sysUser.getAdminType())) {
             throw new ServiceException(SysUserExceptionEnum.USER_CAN_NOT_UPDATE_ADMIN);
         }
 
@@ -345,12 +297,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
     }
 
-    /**
-     * 授权角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:55
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void grantRole(SysUserParam sysUserParam) {
@@ -365,7 +311,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(orgId)) {
+            } else if (!dataScope.contains(orgId)) {
                 //所要授权角色的用户的所属机构不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -373,12 +319,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserRoleService.grantRole(sysUserParam);
     }
 
-    /**
-     * 授权数据
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:55
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void grantData(SysUserParam sysUserParam) {
@@ -393,7 +333,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(orgId)) {
+            } else if (!dataScope.contains(orgId)) {
                 //所要授权数据的用户的所属机构不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -401,12 +341,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserDataScopeService.grantData(sysUserParam);
     }
 
-    /**
-     * 更新信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/1 14:44
-     */
     @Override
     public void updateInfo(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
@@ -414,40 +348,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.updateById(sysUser);
     }
 
-    /**
-     * 修改密码
-     *
-     * @author xuyuxiang
-     * @date 2020/4/1 14:44
-     */
     @Override
     public void updatePwd(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         String passwordMd5 = SecureUtil.md5(sysUserParam.getPassword() + sysUser.getSalt());
         String currentPwdMd5 = sysUser.getPassword();
         //原密码错误
-        if(!passwordMd5.equals(currentPwdMd5)) {
+        if (!passwordMd5.equals(currentPwdMd5)) {
             throw new ServiceException(SysUserExceptionEnum.USER_PWD_ERROR);
         }
-        String newPasswordMd5 = SecureUtil.md5(sysUserParam.getNewPassword()+ sysUser.getSalt());
+        String newPasswordMd5 = SecureUtil.md5(sysUserParam.getNewPassword() + sysUser.getSalt());
         //新密码与原密码相同
-        if(passwordMd5.equals(newPasswordMd5)) {
+        if (passwordMd5.equals(newPasswordMd5)) {
             throw new ServiceException(SysUserExceptionEnum.USER_PWD_REPEAT);
         }
         sysUser.setPassword(newPasswordMd5);
         this.updateById(sysUser);
     }
 
-    /**
-     * 获取用户的数据范围（组织机构id集合）
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 17:24
-     */
     @Override
     public List<Long> getUserDataScopeIdList(Long userId, Long orgId) {
         Set<Long> userDataScopeIdSet = CollectionUtil.newHashSet();
-        if(ObjectUtil.isAllNotEmpty(userId, orgId)) {
+        if (ObjectUtil.isAllNotEmpty(userId, orgId)) {
 
             //获取该用户对应的数据范围集合
             List<Long> userDataScopeIdListForUser = sysUserDataScopeService.getUserDataScopeIdList(userId);
@@ -461,51 +383,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return CollectionUtil.newArrayList(userDataScopeIdSet);
     }
 
-    /**
-     * 根据用户id获取姓名
-     *
-     * @author xuyuxiang
-     * @date 2020/5/6 15:02
-     */
     @Override
     public String getNameByUserId(Long userId) {
         SysUser sysUser = this.getById(userId);
-        if(ObjectUtil.isNull(sysUser)) {
+        if (ObjectUtil.isNull(sysUser)) {
             throw new ServiceException(SysUserExceptionEnum.USER_NOT_EXIST);
         }
         return sysUser.getName();
     }
 
-    /**
-     * 拥有角色
-     *
-     * @author xuyuxiang
-     * @date 2020/5/29 14:10
-     */
     @Override
     public List<Long> ownRole(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         return sysUserRoleService.getUserRoleIdList(sysUser.getId());
     }
 
-    /**
-     * 拥有数据
-     *
-     * @author xuyuxiang
-     * @date 2020/5/29 14:11
-     */
     @Override
     public List<Long> ownData(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         return sysUserDataScopeService.getUserDataScopeIdList(sysUser.getId());
     }
 
-    /**
-     * 重置密码
-     *
-     * @author xuyuxiang
-     * @date 2020/5/29 14:57
-     */
     @Override
     public void resetPwd(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
@@ -514,12 +412,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.updateById(sysUser);
     }
 
-    /**
-     * 修改头像
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 15:22
-     */
     @Override
     public void updateAvatar(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
@@ -529,38 +421,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.updateById(sysUser);
     }
 
-    /**
-     * 导出系统用户
-     *
-     * @author xuyuxiang
-     * @date 2020/6/30 16:08
-     */
     @Override
     public void export(SysUserParam sysUserParam) {
         List<SysUser> list = this.list();
         PoiUtil.exportExcelWithStream("GunsUsers.xls", SysUser.class, list);
     }
 
-    /**
-     * 用户选择器
-     *
-     * @author xuyuxiang
-     * @date 2020/7/3 13:18
-     */
     @Override
     public List<SysUser> selector(SysUserParam sysUserParam) {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        if(ObjectUtil.isNotNull(sysUserParam)) {
+        if (ObjectUtil.isNotNull(sysUserParam)) {
             //根据姓名模糊查询
-            if(ObjectUtil.isNotEmpty(sysUserParam.getName())) {
+            if (ObjectUtil.isNotEmpty(sysUserParam.getName())) {
                 queryWrapper.like("sys_user.name", sysUserParam.getName());
             }
         }
         //如果是超级管理员则获取所有用户，否则只获取其数据范围的用户
         boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
-        if(!superAdmin) {
+        if (!superAdmin) {
             List<Long> dataScope = sysUserParam.getDataScope();
-            if(ObjectUtil.isEmpty(dataScope)) {
+            if (ObjectUtil.isEmpty(dataScope)) {
                 return CollectionUtil.newArrayList();
             } else {
                 Set<Long> dataScopeSet = CollectionUtil.newHashSet(dataScope);
@@ -586,7 +466,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(SysUser::getAccount, account)
                 .ne(SysUser::getStatus, CommonStatusEnum.DELETED.getCode());
         //是否排除自己，如果是则查询条件排除自己id
-        if(isExcludeSelf) {
+        if (isExcludeSelf) {
             queryWrapper.ne(SysUser::getId, id);
         }
         int countByAccount = this.count(queryWrapper);
@@ -604,7 +484,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     private SysUser querySysUser(SysUserParam sysUserParam) {
         SysUser sysUser = this.getById(sysUserParam.getId());
-        if(ObjectUtil.isNull(sysUser)) {
+        if (ObjectUtil.isNull(sysUser)) {
             throw new ServiceException(SysUserExceptionEnum.USER_NOT_EXIST);
         }
         return sysUser;

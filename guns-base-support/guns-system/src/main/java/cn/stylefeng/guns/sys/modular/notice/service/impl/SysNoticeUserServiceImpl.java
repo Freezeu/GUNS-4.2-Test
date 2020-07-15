@@ -45,12 +45,6 @@ import java.util.List;
 @Service
 public class SysNoticeUserServiceImpl extends ServiceImpl<SysNoticeUserMapper, SysNoticeUser> implements SysNoticeUserService {
 
-    /**
-     * 添加
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 11:06
-     */
     @Override
     public void add(Long noticeId, List<Long> noticeUserIdList, Integer noticeUserStatus) {
         noticeUserIdList.forEach(userId -> {
@@ -62,12 +56,6 @@ public class SysNoticeUserServiceImpl extends ServiceImpl<SysNoticeUserMapper, S
         });
     }
 
-    /**
-     * 编辑
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 11:40
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(Long noticeId, List<Long> noticeUserIdList, Integer noticeUserStatus) {
@@ -79,12 +67,6 @@ public class SysNoticeUserServiceImpl extends ServiceImpl<SysNoticeUserMapper, S
         this.add(noticeId, noticeUserIdList, noticeUserStatus);
     }
 
-    /**
-     * 根据通知公告id查询通知人员信息集合
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 11:50
-     */
     @Override
     public List<SysNoticeUser> getSysNoticeUserListByNoticeId(Long noticeId) {
         LambdaQueryWrapper<SysNoticeUser> queryWrapper = new LambdaQueryWrapper<>();
@@ -92,19 +74,13 @@ public class SysNoticeUserServiceImpl extends ServiceImpl<SysNoticeUserMapper, S
         return this.list(queryWrapper);
     }
 
-    /**
-     * 设为已读
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 12:06
-     */
     @Override
     public void read(Long noticeId, Long userId, Integer status) {
         LambdaQueryWrapper<SysNoticeUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysNoticeUser::getNoticeId, noticeId)
                 .eq(SysNoticeUser::getUserId, userId);
         SysNoticeUser sysNoticeUser = this.getOne(queryWrapper);
-        if(ObjectUtil.isNotNull(sysNoticeUser)) {
+        if (ObjectUtil.isNotNull(sysNoticeUser)) {
             sysNoticeUser.setStatus(status);
             sysNoticeUser.setReadTime(new Date());
             this.updateById(sysNoticeUser);

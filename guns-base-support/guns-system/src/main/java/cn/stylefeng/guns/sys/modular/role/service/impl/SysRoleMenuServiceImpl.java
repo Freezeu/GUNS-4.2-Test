@@ -43,13 +43,7 @@ import java.util.List;
  */
 @Service
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
-    
-    /**
-     * 获取角色的菜单id集合
-     *
-     * @author xuyuxiang
-     * @date 2020/3/21 10:18
-     */
+
     @Override
     public List<Long> getRoleMenuIdList(List<Long> roleIdList) {
         List<Long> menuIdList = CollectionUtil.newArrayList();
@@ -63,12 +57,6 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         return menuIdList;
     }
 
-    /**
-     * 授权菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:40
-     */
     @Override
     public void grantMenu(SysRoleParam sysRoleParam) {
         Long roleId = sysRoleParam.getId();
@@ -85,12 +73,6 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         });
     }
 
-    /**
-     * 根据菜单id集合删除对应的角色-菜单表信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:20
-     */
     @Override
     public void deleteRoleMenuListByMenuIdList(List<Long> menuIdList) {
         LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -98,12 +80,6 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         this.remove(queryWrapper);
     }
 
-    /**
-     * 根据角色id删除对应的角色-菜单表关联信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:43
-     */
     @Override
     public void deleteRoleMenuListByRoleId(Long roleId) {
         LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<>();

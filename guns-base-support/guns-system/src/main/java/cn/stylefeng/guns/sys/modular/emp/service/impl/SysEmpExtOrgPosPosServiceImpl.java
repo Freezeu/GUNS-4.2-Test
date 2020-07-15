@@ -85,12 +85,6 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
      */
     private static final String EXT_POS_NAME_DICT_KEY = "posName";
 
-    /**
-     * 保存附属机构职位相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 9:00
-     */
     @Override
     public void addOrEdit(Long empId, List<Dict> extIdList) {
         LambdaQueryWrapper<SysEmpExtOrgPos> queryWrapper = new LambdaQueryWrapper<>();
@@ -109,12 +103,6 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
         });
     }
 
-    /**
-     * 获取附属机构和职位信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 20:07
-     */
     @Override
     public List<Dict> getEmpExtOrgPosDictList(Long empId, boolean isFillId) {
         List<Dict> dictList = CollectionUtil.newArrayList();
@@ -134,7 +122,7 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
             dict.put(EXT_POS_CODE_DICT_KEY, sysPos.getCode());
             dict.put(EXT_POS_NAME_DICT_KEY, sysPos.getName());
 
-            if(isFillId) {
+            if (isFillId) {
                 dict.put(EXT_ORG_ID_DICT_KEY, orgId);
                 dict.put(EXT_POS_ID_DICT_KEY, posId);
             }
@@ -144,12 +132,6 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
         return dictList;
     }
 
-    /**
-     * 根据机构id判断该附属机构下是否有员工
-     *
-     * @author xuyuxiang
-     * @date 2020/6/23 10:31
-     */
     @Override
     public boolean hasExtOrgEmp(Long orgId) {
         LambdaQueryWrapper<SysEmpExtOrgPos> queryWrapper = new LambdaQueryWrapper<>();
@@ -158,12 +140,6 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
         return list.size() != 0;
     }
 
-    /**
-     * 根据职位id判断该附属职位下是否有员工
-     *
-     * @author xuyuxiang
-     * @date 2020/6/23 10:39
-     */
     @Override
     public boolean hasExtPosEmp(Long posId) {
         LambdaQueryWrapper<SysEmpExtOrgPos> queryWrapper = new LambdaQueryWrapper<>();
@@ -172,12 +148,6 @@ public class SysEmpExtOrgPosPosServiceImpl extends ServiceImpl<SysEmpExtOrgPosMa
         return list.size() != 0;
     }
 
-    /**
-     * 根据员工id删除对应的员工-附属信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:57
-     */
     @Override
     public void deleteEmpExtInfoByUserId(Long empId) {
         LambdaQueryWrapper<SysEmpExtOrgPos> queryWrapper = new LambdaQueryWrapper<>();

@@ -77,12 +77,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Resource
     private SysOrgService sysOrgService;
 
-    /**
-     * 获取用户角色相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/3/13 16:28
-     */
     @Override
     public List<Dict> getLoginRoles(Long userId) {
         List<Dict> dictList = CollectionUtil.newArrayList();
@@ -103,12 +97,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return dictList;
     }
 
-    /**
-     * 查询系统角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 14:57
-     */
     @Override
     public PageResult<SysRole> page(SysRoleParam sysRoleParam) {
         LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
@@ -137,12 +125,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return new PageResult<>(this.page(PageFactory.defaultPage(), queryWrapper));
     }
 
-    /**
-     * 根据角色名模糊搜索系统角色列表
-     *
-     * @author xuyuxiang
-     * @date 2020/4/14 17:21
-     */
     @Override
     public List<Dict> list(SysRoleParam sysRoleParam) {
         List<Dict> dictList = CollectionUtil.newArrayList();
@@ -166,12 +148,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return dictList;
     }
 
-    /**
-     * 系统角色下拉（用于授权角色时选择）
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 16:48
-     */
     @Override
     public List<Dict> dropDown() {
         List<Dict> dictList = CollectionUtil.newArrayList();
@@ -199,12 +175,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return dictList;
     }
 
-    /**
-     * 添加系统角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 14:58
-     */
     @Override
     public void add(SysRoleParam sysRoleParam) {
         //校验参数，检查是否存在相同的名称和编码
@@ -215,12 +185,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         this.save(sysRole);
     }
 
-    /**
-     * 删除系统角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 14:58
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(SysRoleParam sysRoleParam) {
@@ -238,12 +202,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRoleMenuService.deleteRoleMenuListByRoleId(id);
     }
 
-    /**
-     * 编辑系统角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 14:58
-     */
     @Override
     public void edit(SysRoleParam sysRoleParam) {
         SysRole sysRole = this.querySysRole(sysRoleParam);
@@ -255,23 +213,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         this.updateById(sysRole);
     }
 
-    /**
-     * 查看系统角色
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 14:59
-     */
     @Override
     public SysRole detail(SysRoleParam sysRoleParam) {
         return this.querySysRole(sysRoleParam);
     }
 
-    /**
-     * 授权菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:19
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void grantMenu(SysRoleParam sysRoleParam) {
@@ -279,12 +225,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRoleMenuService.grantMenu(sysRoleParam);
     }
 
-    /**
-     * 授权数据
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:20
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void grantData(SysRoleParam sysRoleParam) {
@@ -318,13 +258,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRoleDataScopeService.grantDataScope(sysRoleParam);
     }
 
-    /**
-     * 根据角色id集合获取数据范围集合
-     * 数据范围类型（字典 1全部数据 2本部门及以下数据 3本部门数据 4仅本人数据 5自定义数据）
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 17:42
-     */
     @Override
     public List<Long> getUserDataScopeIdList(List<Long> roleIdList, Long orgId) {
         Set<Long> resultList = CollectionUtil.newHashSet();
@@ -358,12 +291,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return CollectionUtil.newArrayList(resultList);
     }
 
-    /**
-     * 根据角色id获取名称
-     *
-     * @author xuyuxiang
-     * @date 2020/5/22 16:15
-     */
     @Override
     public String getNameByRoleId(Long roleId) {
         SysRole sysRole = this.getById(roleId);
@@ -373,24 +300,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return sysRole.getName();
     }
 
-    /**
-     * 查询角色拥有菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/5/29 14:04
-     */
     @Override
     public List<Long> ownMenu(SysRoleParam sysRoleParam) {
         SysRole sysRole = this.querySysRole(sysRoleParam);
         return sysRoleMenuService.getRoleMenuIdList(CollectionUtil.newArrayList(sysRole.getId()));
     }
 
-    /**
-     * 查询角色拥有数据
-     *
-     * @author xuyuxiang
-     * @date 2020/5/29 14:04
-     */
     @Override
     public List<Long> ownData(SysRoleParam sysRoleParam) {
         SysRole sysRole = this.querySysRole(sysRoleParam);

@@ -83,7 +83,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         LambdaQueryWrapper<SysFileInfo> queryWrapper = new LambdaQueryWrapper<>();
 
         // 拼接查询条件-文件存储位置（1:阿里云，2:腾讯云，3:minio，4:本地）
-        if(ObjectUtil.isNotNull(sysFileInfoParam)) {
+        if (ObjectUtil.isNotNull(sysFileInfoParam)) {
             if (ObjectUtil.isNotEmpty(sysFileInfoParam.getFileLocation())) {
                 queryWrapper.like(SysFileInfo::getFileLocation, sysFileInfoParam.getFileLocation());
             }
@@ -157,7 +157,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         // 获取文件后缀
         String fileSuffix = null;
 
-        if(ObjectUtil.isNotEmpty(originalFilename)) {
+        if (ObjectUtil.isNotEmpty(originalFilename)) {
             fileSuffix = StrUtil.subAfter(originalFilename, SymbolConstant.PERIOD, true);
         }
         // 生成文件的最终名称
@@ -218,12 +218,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         return sysFileInfoResult;
     }
 
-    /**
-     * 判断文件是否存在
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 15:55
-     */
     @Override
     public void assertFile(Long field) {
         SysFileInfo sysFileInfo = this.getById(field);
@@ -232,12 +226,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         }
     }
 
-    /**
-     * 文件预览
-     *
-     * @author xuyuxiang
-     * @date 2020/7/7 11:23
-     */
     @Override
     public void preview(SysFileInfoParam sysFileInfoParam, HttpServletResponse response) {
 
@@ -249,7 +237,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         //获取文件字节码
         fileBytes = sysFileInfoResult.getFileBytes();
         //如果是图片类型，则直接输出
-        if(LibreOfficeUtil.isPic(fileSuffix)) {
+        if (LibreOfficeUtil.isPic(fileSuffix)) {
             try {
                 //设置contentType
                 response.setContentType("image/jpeg");
@@ -261,7 +249,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                 throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
             }
 
-        } else if(LibreOfficeUtil.isDoc(fileSuffix)){
+        } else if (LibreOfficeUtil.isDoc(fileSuffix)) {
             try {
                 //如果是文档类型，则使用libreoffice转换为pdf或html
                 InputStream inputStream = IoUtil.toStream(fileBytes);
@@ -295,12 +283,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         }
     }
 
-    /**
-     * 文件下载
-     *
-     * @author xuyuxiang
-     * @date 2020/7/7 12:09
-     */
     @Override
     public void download(SysFileInfoParam sysFileInfoParam, HttpServletResponse response) {
         // 获取文件信息结果集
