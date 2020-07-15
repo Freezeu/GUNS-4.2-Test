@@ -25,6 +25,8 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.guns.sys.modular.email.controler;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.mail.MailException;
+import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.annotion.BusinessLog;
 import cn.stylefeng.guns.core.enums.LogAnnotionOpTypeEnum;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -47,6 +49,8 @@ import javax.annotation.Resource;
  */
 @RestController
 public class EmailController {
+
+    private static final Log log = Log.get();
 
     @Resource
     private MailSender mailSender;
@@ -74,7 +78,12 @@ public class EmailController {
         if(ObjectUtil.isEmpty(content)) {
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_CONTENT_EMPTY);
         }
-        mailSender.sendMail(sendMailParam);
+        try {
+            mailSender.sendMail(sendMailParam);
+        } catch (MailException e) {
+            log.error(">>> 邮件发送异常:", e);
+            throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
+        }
         return new SuccessResponseData();
     }
 
@@ -101,7 +110,12 @@ public class EmailController {
         if(ObjectUtil.isEmpty(content)) {
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_CONTENT_EMPTY);
         }
-        mailSender.sendMailHtml(sendMailParam);
+        try {
+            mailSender.sendMailHtml(sendMailParam);
+        } catch (MailException e) {
+            log.error(">>> 邮件发送异常:", e);
+            throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
+        }
         return new SuccessResponseData();
     }
 }
