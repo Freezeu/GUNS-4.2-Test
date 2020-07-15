@@ -55,7 +55,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private static Log log = Log.get();
+    private static final Log log = Log.get();
 
     @Resource
     private AuthService authService;
@@ -65,7 +65,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             doFilter(request, response, filterChain);
         } catch (Exception e) {
-            log.error(">>> 服务器运行异常: {}", e);
+            log.error(">>> 服务器运行异常:", e);
             ResponseUtil.responseExceptionError(response, ServerExceptionEnum.SERVER_ERROR.getCode(),
                     ServerExceptionEnum.SERVER_ERROR.getMessage(), e.getStackTrace()[0].toString());
         }

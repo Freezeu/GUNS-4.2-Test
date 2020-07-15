@@ -52,7 +52,12 @@ public enum SysEmailExceptionEnum implements AbstractBaseExceptionEnum {
     /**
      * 内容为空
      */
-    EMAIL_CONTENT_EMPTY(3, "内容为空，请检查content参数");
+    EMAIL_CONTENT_EMPTY(3, "内容为空，请检查content参数"),
+
+    /**
+     * 邮件发送失败
+     */
+    EMAIL_SEND_ERROR(4, "邮件发送失败，请检查发送参数");
 
     private final Integer code;
 
