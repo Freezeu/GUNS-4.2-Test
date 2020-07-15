@@ -24,6 +24,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.guns.sys.modular.menu.service.impl;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -246,46 +247,75 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void edit(SysMenuParam sysMenuParam) {
 
-        SysMenu sysMenu = this.querySysMenu(sysMenuParam);
-
-        //校验参数
+        // 校验参数
         checkParam(sysMenuParam, true);
 
-        //如果应用有变化
-        if (!sysMenuParam.getApplication().equals(sysMenu.getApplication())) {
+        SysMenu oldMenu = this.querySysMenu(sysMenuParam);
+
+        // 本菜单旧的pids
+        String oldPids = oldMenu.getPids();
+
+        // 填充新的pids
+        oldMenu.setPid(sysMenuParam.getPid());
+        this.fillPids(oldMenu);
+
+        // 是否更新子应用的标识
+        boolean updateSubAppsFlag = false;
+
+        // 是否更新子节点的pids的标识
+        boolean updateSubPidsFlag = false;
+
+        // 如果应用有变化
+        if (!sysMenuParam.getApplication().equals(oldMenu.getApplication())) {
+            // 父节点不是根节点不能移动应用
+            if (!oldMenu.getPid().equals(0L)) {
+                throw new ServiceException(SysMenuExceptionEnum.CANT_MOVE_APP);
+            }
+            updateSubAppsFlag = true;
+        }
+
+        // 父节点有变化
+        if (!sysMenuParam.getPid().equals(oldMenu.getPid())) {
+            updateSubPidsFlag = true;
+        }
+
+        // 开始更新所有子节点的配置
+        if (updateSubAppsFlag || updateSubPidsFlag) {
 
             // 查找所有叶子节点，包含子节点的子节点
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.like(SysMenu::getPids, sysMenu.getId());
+            queryWrapper.like(SysMenu::getPids, oldMenu.getId());
             List<SysMenu> list = this.list(queryWrapper);
 
             // 更新所有子节点的应用为当前菜单的应用
             if (ObjectUtil.isNotEmpty(list)) {
-                list.forEach(child -> child.setApplication(sysMenuParam.getApplication()));
-                this.updateBatchById(list);
-            }
-            // 如果没有子几点，查询父节点
-            else {
-                Long pid = sysMenu.getPid();
 
-                // 如果父节点不是根节点
-                if (!pid.equals(0L)) {
-                    SysMenu pSysMenu = this.getById(pid);
-                    // 如果父节点不属于该应用，则无法修改其为该应用
-                    if (!pSysMenu.getApplication().equals(sysMenu.getApplication())) {
-                        throw new ServiceException(SysMenuExceptionEnum.MENU_PARENT_APPLICATION_ERROR);
-                    }
+                // 更新所有子节点的application
+                if (updateSubAppsFlag) {
+                    list.forEach(child -> child.setApplication(sysMenuParam.getApplication()));
                 }
+                // 更新所有子节点的pids
+                if (updateSubPidsFlag) {
+                    list.forEach(child -> {
+                        // 子节点pids组成 = 当前菜单新pids + 当前菜单id + 子节点自己的pids后缀
+                        String oldPcodesPrefix = oldPids + "[" + oldMenu.getId() + "],";
+                        String oldPcodesSuffix = child.getPids().substring(oldPcodesPrefix.length());
+                        String menuPcodes = oldMenu.getPids() + "[" + oldMenu.getId() + "]," + oldPcodesSuffix;
+                        child.setPids(menuPcodes);
+                    });
+                }
+
+                this.updateBatchById(list);
             }
         }
 
-        BeanUtil.copyProperties(sysMenuParam, sysMenu);
+        // 拷贝参数到实体中
+        BeanUtil.copyProperties(sysMenuParam, oldMenu);
 
-        this.fillPids(sysMenu);
-
-        this.updateById(sysMenu);
+        this.updateById(oldMenu);
     }
 
     @Override
@@ -467,17 +497,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private void fillPids(SysMenu sysMenu) {
         if (sysMenu.getPid().equals(0L)) {
-            sysMenu.setPids(SymbolConstant.LEFT_SQUARE_BRACKETS +
-                    0 +
-                    SymbolConstant.RIGHT_SQUARE_BRACKETS +
-                    SymbolConstant.COMMA);
+            sysMenu.setPids(SymbolConstant.LEFT_SQUARE_BRACKETS + 0 + SymbolConstant.RIGHT_SQUARE_BRACKETS
+                    + SymbolConstant.COMMA);
         } else {
-            //获取父组织机构
-            SysMenu pSysMenu = this.getById(sysMenu.getPid());
-            sysMenu.setPids(pSysMenu.getPids() +
-                    SymbolConstant.LEFT_SQUARE_BRACKETS + pSysMenu.getId() +
-                    SymbolConstant.RIGHT_SQUARE_BRACKETS +
-                    SymbolConstant.COMMA);
+            //获取父菜单
+            SysMenu parentMenu = this.getById(sysMenu.getPid());
+            sysMenu.setPids(parentMenu.getPids()
+                    + SymbolConstant.LEFT_SQUARE_BRACKETS + parentMenu.getId() + SymbolConstant.RIGHT_SQUARE_BRACKETS
+                    + SymbolConstant.COMMA);
         }
     }
 

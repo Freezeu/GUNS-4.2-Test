@@ -85,9 +85,9 @@ public enum SysMenuExceptionEnum implements AbstractBaseExceptionEnum {
     MENU_PERMISSION_NOT_EXIST(9, "权限不存在，请检查permission参数"),
 
     /**
-     * 编辑失败
+     * 不能移动根节点
      */
-    MENU_PARENT_APPLICATION_ERROR(10, "编辑失败，菜单所属应用应与父菜单所属应用一致");
+    CANT_MOVE_APP(10, "父节点不是根节点不能移动应用");
 
     private final Integer code;
 
