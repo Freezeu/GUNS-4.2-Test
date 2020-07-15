@@ -448,10 +448,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<Long> getUserDataScopeIdList(Long userId, Long orgId) {
         Set<Long> userDataScopeIdSet = CollectionUtil.newHashSet();
         if(ObjectUtil.isAllNotEmpty(userId, orgId)) {
+
             //获取该用户对应的数据范围集合
             List<Long> userDataScopeIdListForUser = sysUserDataScopeService.getUserDataScopeIdList(userId);
+
             //获取该用户的角色对应的数据范围集合
-            List<Long> userDataScopeIdListForRole = sysUserRoleService.getUserDataScopeIdList(userId, orgId);
+            List<Long> userDataScopeIdListForRole = sysUserRoleService.getUserRoleDataScopeIdList(userId, orgId);
+
             userDataScopeIdSet.addAll(userDataScopeIdListForUser);
             userDataScopeIdSet.addAll(userDataScopeIdListForRole);
         }

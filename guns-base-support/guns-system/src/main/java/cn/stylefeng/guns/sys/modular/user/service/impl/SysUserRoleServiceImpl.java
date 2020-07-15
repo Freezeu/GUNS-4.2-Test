@@ -94,12 +94,16 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
      * @date 2020/4/5 17:32
      */
     @Override
-    public List<Long> getUserDataScopeIdList(Long userId, Long orgId) {
+    public List<Long> getUserRoleDataScopeIdList(Long userId, Long orgId) {
         List<Long> roleIdList = CollectionUtil.newArrayList();
+
+        // 获取用户所有角色
         LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUserRole::getUserId, userId);
         this.list(queryWrapper).forEach(sysUserRole -> roleIdList.add(sysUserRole.getRoleId()));
-        if(ObjectUtil.isNotEmpty(roleIdList)) {
+
+        // 获取这些角色对应的数据范围
+        if (ObjectUtil.isNotEmpty(roleIdList)) {
             return sysRoleService.getUserDataScopeIdList(roleIdList, orgId);
         }
         return CollectionUtil.newArrayList();
