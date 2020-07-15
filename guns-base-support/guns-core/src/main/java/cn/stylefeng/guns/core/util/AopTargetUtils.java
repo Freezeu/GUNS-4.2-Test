@@ -61,7 +61,7 @@ public class AopTargetUtils {
                 return getCglibProxyTargetObject(proxy);
             }
         } catch (Exception e) {
-            log.error(">>> 获取代理对象异常", e);
+            log.error(">>> 获取代理对象异常：{}", e.getMessage());
             return null;
         }
     }

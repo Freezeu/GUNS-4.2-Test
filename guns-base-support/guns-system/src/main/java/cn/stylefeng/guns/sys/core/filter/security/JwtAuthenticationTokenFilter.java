@@ -65,7 +65,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             doFilter(request, response, filterChain);
         } catch (Exception e) {
-            log.error(">>> 服务器运行异常:", e);
+            log.error(">>> 服务器运行异常：{}", e.getMessage());
             ResponseUtil.responseExceptionError(response, ServerExceptionEnum.SERVER_ERROR.getCode(),
                     ServerExceptionEnum.SERVER_ERROR.getMessage(), e.getStackTrace()[0].toString());
         }

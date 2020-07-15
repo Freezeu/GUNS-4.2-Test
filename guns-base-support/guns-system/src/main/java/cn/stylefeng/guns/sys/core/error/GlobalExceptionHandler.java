@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TencentSmsException.class)
     @ResponseBody
     public ErrorResponseData aliyunSmsException(TencentSmsException e) {
-        log.error(">>> 发送短信异常:", e.getErrorMessage());
+        log.error(">>> 发送短信异常：{}", e.getErrorMessage());
         return renderJson(500, e.getErrorMessage());
     }
 
@@ -96,7 +96,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AliyunSmsException.class)
     @ResponseBody
     public ErrorResponseData aliyunSmsException(AliyunSmsException e) {
-        log.error(">>> 发送短信异常:", e.getErrorMessage());
+        log.error(">>> 发送短信异常：{}", e.getErrorMessage());
         return renderJson(500, e.getErrorMessage());
     }
 
@@ -109,7 +109,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public ErrorResponseData httpMessageNotReadable(HttpMessageNotReadableException e) {
-        log.error(">>> 参数格式传递异常:", RequestTypeExceptionEnum.REQUEST_JSON_ERROR.getMessage());
+        log.error(">>> 参数格式传递异常：{}", RequestTypeExceptionEnum.REQUEST_JSON_ERROR.getMessage());
         return renderJson(RequestTypeExceptionEnum.REQUEST_JSON_ERROR);
     }
 
@@ -122,7 +122,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseBody
     public ErrorResponseData httpMediaTypeNotSupport(HttpMediaTypeNotSupportedException e) {
-        log.error(">>> 参数格式传递异常:", RequestTypeExceptionEnum.REQUEST_TYPE_IS_JSON.getMessage());
+        log.error(">>> 参数格式传递异常：{}", RequestTypeExceptionEnum.REQUEST_TYPE_IS_JSON.getMessage());
         return renderJson(RequestTypeExceptionEnum.REQUEST_TYPE_IS_JSON);
     }
 
@@ -136,11 +136,11 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorResponseData methodNotSupport(HttpServletRequest request) {
         if (ServletUtil.isPostMethod(request)) {
-            log.error(">>> 请求方法异常:", RequestMethodExceptionEnum.REQUEST_METHOD_IS_GET.getMessage());
+            log.error(">>> 请求方法异常：{}", RequestMethodExceptionEnum.REQUEST_METHOD_IS_GET.getMessage());
             return renderJson(RequestMethodExceptionEnum.REQUEST_METHOD_IS_GET);
         }
         if (ServletUtil.isGetMethod(request)) {
-            log.error(">>> 请求方法异常:", RequestMethodExceptionEnum.REQUEST_METHOD_IS_POST.getMessage());
+            log.error(">>> 请求方法异常：{}", RequestMethodExceptionEnum.REQUEST_METHOD_IS_POST.getMessage());
             return renderJson(RequestMethodExceptionEnum.REQUEST_METHOD_IS_POST);
         }
         return null;
@@ -156,7 +156,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorResponseData notFound(NoHandlerFoundException e) {
-        log.error(">>> 资源不存在异常:", e);
+        log.error(">>> 资源不存在异常：{}", e.getMessage());
         return renderJson(PermissionExceptionEnum.URL_NOT_EXIST);
     }
 
@@ -170,7 +170,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorResponseData methodArgumentNotValidException(MethodArgumentNotValidException e) {
         String argNotValidMessage = getArgNotValidMessage(e.getBindingResult());
-        log.error(">>> 参数校验错误异常:", argNotValidMessage);
+        log.error(">>> 参数校验错误异常：{}", argNotValidMessage);
         return renderJson(ParamExceptionEnum.PARAM_ERROR.getCode(), argNotValidMessage);
     }
 
@@ -184,7 +184,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorResponseData paramError(BindException e) {
         String argNotValidMessage = getArgNotValidMessage(e.getBindingResult());
-        log.error(">>> 参数校验错误异常:", argNotValidMessage);
+        log.error(">>> 参数校验错误异常：{}", argNotValidMessage);
         return renderJson(ParamExceptionEnum.PARAM_ERROR.getCode(), argNotValidMessage);
     }
 
@@ -197,7 +197,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     @ResponseBody
     public ErrorResponseData authFail(AuthException e) {
-        log.error(">>> 认证异常:", e.getMessage());
+        log.error(">>> 认证异常：{}", e.getMessage());
         return renderJson(e.getCode(), e.getErrorMessage());
     }
 
@@ -210,7 +210,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PermissionException.class)
     @ResponseBody
     public ErrorResponseData noPermission(PermissionException e) {
-        log.error(">>> 权限异常:", e.getMessage());
+        log.error(">>> 权限异常：{}", e.getMessage());
         return renderJson(e.getCode(), e.getErrorMessage());
     }
 
@@ -223,7 +223,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     @ResponseBody
     public ErrorResponseData businessError(ServiceException e) {
-        log.error(">>> 业务异常:", e.getMessage());
+        log.error(">>> 业务异常：{}", e.getMessage());
         return renderJson(e.getCode(), e.getErrorMessage(), e);
     }
 
@@ -238,7 +238,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MyBatisSystemException.class)
     @ResponseBody
     public ErrorResponseData persistenceException(MyBatisSystemException e) {
-        log.error(">>> mybatis操作出现异常:", e.getMessage());
+        log.error(">>> mybatis操作出现异常：{}", e.getMessage());
         Throwable cause = e.getCause();
         if (cause instanceof PersistenceException) {
             Throwable secondCause = cause.getCause();

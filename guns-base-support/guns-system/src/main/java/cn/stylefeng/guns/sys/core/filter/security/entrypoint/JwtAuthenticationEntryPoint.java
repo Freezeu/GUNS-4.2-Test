@@ -71,7 +71,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         //1.检查redis中RESOURCE缓存是否为空，如果为空，直接抛出系统异常，缓存url作用详见ResourceCollectListener
         Collection<String> urlCollections = resourceCache.getAllResources();
         if (ObjectUtil.isEmpty(urlCollections)) {
-            log.error(">>> 获取缓存的Resource Url为空，请检查缓存中是否被误删,requestUri={}", requestUri);
+            log.error(">>> 获取缓存的Resource Url为空，请检查缓存中是否被误删，requestUri={}", requestUri);
             ResponseUtil.responseExceptionError(response,
                     ServerExceptionEnum.SERVER_ERROR.getCode(),
                     ServerExceptionEnum.SERVER_ERROR.getMessage(),

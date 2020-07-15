@@ -94,7 +94,7 @@ public class IpAddressUtil {
             //根据url获取地址
             resultJson = HttpUtil.get(URL, genParamMap(ip));
         } catch (Exception e) {
-            log.error(">>> 根据ip定位异常:", e);
+            log.error(">>> 根据ip定位异常：{}", e.getMessage());
             return resultJson;
         }
         if (ObjectUtil.isEmpty(resultJson)) {

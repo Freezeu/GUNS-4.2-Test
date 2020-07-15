@@ -81,7 +81,7 @@ public class EmailController {
         try {
             mailSender.sendMail(sendMailParam);
         } catch (MailException e) {
-            log.error(">>> 邮件发送异常:", e);
+            log.error(">>> 邮件发送异常：{}", e.getMessage());
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
         }
         return new SuccessResponseData();
@@ -113,7 +113,7 @@ public class EmailController {
         try {
             mailSender.sendMailHtml(sendMailParam);
         } catch (MailException e) {
-            log.error(">>> 邮件发送异常:", e);
+            log.error(">>> 邮件发送异常：{}", e.getMessage());
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
         }
         return new SuccessResponseData();

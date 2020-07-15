@@ -31,6 +31,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
 import cn.stylefeng.guns.core.exception.LibreOfficeException;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -72,6 +73,8 @@ import static cn.stylefeng.guns.sys.modular.file.enums.SysFileInfoExceptionEnum.
  */
 @Service
 public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFileInfo> implements SysFileInfoService {
+
+    private static final Log log = Log.get();
 
     @Resource
     private FileOperator fileOperator;
@@ -207,7 +210,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             // 返回文件字节码
             fileBytes = fileOperator.getFileBytes(DEFAULT_BUCKET, sysFileInfo.getFileObjectName());
         } catch (Exception e) {
-            log.error(">>> 获取文件流异常:", e);
+            log.error(">>> 获取文件流异常：{}", e.getMessage());
             throw new ServiceException(SysFileInfoExceptionEnum.FILE_STREAM_ERROR);
         }
 
@@ -281,11 +284,11 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                 //输出
                 IoUtil.write(outputStream, true, fileBytes);
             } catch (IOException e) {
-                log.error(">>> 预览文件异常:", e);
+                log.error(">>> 预览文件异常：{}", e.getMessage());
                 throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
 
             } catch (LibreOfficeException e) {
-                log.error(">>> 初始化LibreOffice失败:", e);
+                log.error(">>> 初始化LibreOffice失败：{}", e.getMessage());
                 throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_LIBREOFFICE);
             }
 
@@ -315,7 +318,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             response.setContentType("application/octet-stream;charset=UTF-8");
             IoUtil.write(response.getOutputStream(), true, fileBytes);
         } catch (IOException e) {
-            log.error(">>> 下载文件异常:", e);
+            log.error(">>> 下载文件异常：{}", e.getMessage());
             throw new ServiceException(DOWNLOAD_FILE_ERROR);
         }
     }

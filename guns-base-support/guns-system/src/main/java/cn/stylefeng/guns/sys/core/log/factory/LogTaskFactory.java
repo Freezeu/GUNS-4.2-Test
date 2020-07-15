@@ -64,7 +64,7 @@ public class LogTaskFactory {
                     LogFactory.createSysLoginLog(sysVisLog, account, success, failMessage);
                     sysVisLogService.save(sysVisLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建登录日志异常:", e);
+                    log.error(">>> 创建登录日志异常：{}", e.getMessage());
                 }
             }
         };
@@ -84,7 +84,7 @@ public class LogTaskFactory {
                     LogFactory.createSysExitLog(sysVisLog, account);
                     sysVisLogService.save(sysVisLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建退出日志异常:", e);
+                    log.error(">>> 创建退出日志异常：{}", e.getMessage());
                 }
             }
         };
@@ -104,7 +104,7 @@ public class LogTaskFactory {
                     LogFactory.createSysOperationLog(sysOpLog, account, businessLog, joinPoint, result);
                     sysOpLogService.save(sysOpLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建操作日志异常:", e);
+                    log.error(">>> 创建操作日志异常：{}", e.getMessage());
                 }
             }
         };
@@ -124,7 +124,7 @@ public class LogTaskFactory {
                     LogFactory.createSysExceptionLog(sysOpLog, account, businessLog, joinPoint, exception);
                     sysOpLogService.save(sysOpLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建异常日志异常:", e);
+                    log.error(">>> 创建异常日志异常：{}", e.getMessage());
                 }
             }
         };

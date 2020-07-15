@@ -91,7 +91,7 @@ public class ConstantsInitListener implements ApplicationListener<ApplicationCon
                 entityList.forEach(sysConfig -> ConstantContext.putConstant(sysConfig.getStr("code"), sysConfig.getStr("value")));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            log.error(">>> 读取数据库constants配置信息出错:", e);
+            log.error(">>> 读取数据库constants配置信息出错：{}", e.getMessage());
             throw new ServiceException(DATA_SOURCE_NOT_EXIST);
         } finally {
             DbUtil.close(conn);
