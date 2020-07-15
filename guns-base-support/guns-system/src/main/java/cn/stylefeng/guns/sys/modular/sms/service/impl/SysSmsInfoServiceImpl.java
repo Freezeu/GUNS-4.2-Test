@@ -61,12 +61,6 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
 
     private static final Log log = Log.get();
 
-    /**
-     * 存储短信验证信息
-     *
-     * @author stylefeng
-     * @date 2018/7/6 16:47
-     */
     @Override
     public Long saveSmsInfo(SysSmsSendParam sysSmsSendParam, String validateCode) {
 
@@ -104,12 +98,6 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         return sysSms.getId();
     }
 
-    /**
-     * 更新短息发送状态
-     *
-     * @author stylefeng
-     * @date 2018/7/6 17:12
-     */
     @Override
     public void updateSmsInfo(Long smsId, SmsSendStatusEnum smsSendStatusEnum) {
         SysSms sysSms = this.getById(smsId);
@@ -117,12 +105,6 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         this.updateById(sysSms);
     }
 
-    /**
-     * 校验验证码是否正确
-     *
-     * @author stylefeng
-     * @date 2018/7/6 17:16
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SmsVerifyEnum validateSmsInfo(SysSmsVerifyParam sysSmsVerifyParam) {
@@ -187,26 +169,20 @@ public class SysSmsInfoServiceImpl extends ServiceImpl<SysSmsMapper, SysSms> imp
         }
     }
 
-    /**
-     * 短信发送记录查询
-     *
-     * @author xuyuxiang
-     * @date 2020/7/2 12:09
-     */
     @Override
     public PageResult<SysSms> page(SysSmsInfoParam sysSmsInfoParam) {
         LambdaQueryWrapper<SysSms> queryWrapper = new LambdaQueryWrapper<>();
-        if(ObjectUtil.isNotNull(sysSmsInfoParam)) {
+        if (ObjectUtil.isNotNull(sysSmsInfoParam)) {
             //根据手机号模糊查询
-            if(ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhoneNumbers())) {
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getPhoneNumbers())) {
                 queryWrapper.like(SysSms::getPhoneNumbers, sysSmsInfoParam.getPhoneNumbers());
             }
             //根据发送状态查询（字典 0 未发送，1 发送成功，2 发送失败，3 失效）
-            if(ObjectUtil.isNotEmpty(sysSmsInfoParam.getStatus())) {
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getStatus())) {
                 queryWrapper.eq(SysSms::getStatus, sysSmsInfoParam.getStatus());
             }
             //根据来源查询（字典 1 app， 2 pc， 3 其他）
-            if(ObjectUtil.isNotEmpty(sysSmsInfoParam.getSource())) {
+            if (ObjectUtil.isNotEmpty(sysSmsInfoParam.getSource())) {
                 queryWrapper.eq(SysSms::getSource, sysSmsInfoParam.getSource());
             }
         }

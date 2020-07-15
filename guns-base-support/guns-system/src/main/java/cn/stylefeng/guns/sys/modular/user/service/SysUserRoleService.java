@@ -58,15 +58,15 @@ public interface SysUserRoleService extends IService<SysUserRole> {
     void grantRole(SysUserParam sysUserParam);
 
     /**
-     * 获取用户的数据范围（组织机构id集合）
+     * 获取用户所有角色的数据范围（组织机构id集合）
      *
      * @param userId 用户id
-     * @param orgId 组织机构id
+     * @param orgId  组织机构id
      * @return 数据范围id集合（组织机构id集合）
      * @author xuyuxiang
      * @date 2020/4/5 17:31
      */
-    List<Long> getUserDataScopeIdList(Long userId, Long orgId);
+    List<Long> getUserRoleDataScopeIdList(Long userId, Long orgId);
 
     /**
      * 根据角色id删除对应的用户-角色表关联信息

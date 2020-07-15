@@ -99,12 +99,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return CollectionUtil.newArrayList(permissions);
     }
 
-    /**
-     * 根据应用分类编码获取当前用户AntDesign菜单相关信息，前端使用
-     *
-     * @author yubaoshan
-     * @date 2020/4/17 17:51
-     */
     @Override
     public List<LoginMenuTreeNode> getLoginMenusAntDesign(Long userId, String appCode) {
         List<SysMenu> sysMenuList;
@@ -186,12 +180,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return antDesignMenuTreeNodeList;
     }
 
-    /**
-     * 获取用户菜单所属的应用编码集合
-     *
-     * @author xuyuxiang
-     * @date 2020/3/21 11:01
-     */
     @Override
     public List<String> getUserMenuAppCodeList(Long userId) {
         Set<String> appCodeSet = CollectionUtil.newHashSet();
@@ -212,12 +200,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return CollectionUtil.newArrayList(appCodeSet);
     }
 
-    /**
-     * 系统菜单列表（树表）
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 20:45
-     */
     @Override
     public List<SysMenu> list(SysMenuParam sysMenuParam) {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -237,12 +219,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return new TreeBuildFactory<SysMenu>().doTreeBuild(sysMenuList);
     }
 
-    /**
-     * 添加系统菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/27 9:10
-     */
     @Override
     public void add(SysMenuParam sysMenuParam) {
         //校验参数
@@ -254,12 +230,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         this.save(sysMenu);
     }
 
-    /**
-     * 删除系统菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/27 9:11
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(SysMenuParam sysMenuParam) {
@@ -275,61 +245,54 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         sysRoleMenuService.deleteRoleMenuListByMenuIdList(childIdList);
     }
 
-    /**
-     * 编辑系统菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/27 9:11
-     */
     @Override
     public void edit(SysMenuParam sysMenuParam) {
+
         SysMenu sysMenu = this.querySysMenu(sysMenuParam);
+
         //校验参数
         checkParam(sysMenuParam, true);
+
         //如果应用有变化
         if (!sysMenuParam.getApplication().equals(sysMenu.getApplication())) {
-            //如果该菜单不为叶子节点，则将其子节点的数据全部修改为该应用
+
+            // 查找所有叶子节点，包含子节点的子节点
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.like(SysMenu::getPids, sysMenu.getId());
             List<SysMenu> list = this.list(queryWrapper);
-            if(ObjectUtil.isNotEmpty(list)) {
-                list.forEach(child -> child.setApplication(sysMenu.getApplication()));
+
+            // 更新所有子节点的应用为当前菜单的应用
+            if (ObjectUtil.isNotEmpty(list)) {
+                list.forEach(child -> child.setApplication(sysMenuParam.getApplication()));
                 this.updateBatchById(list);
-            } else {
-                //否则查询父节点
+            }
+            // 如果没有子几点，查询父节点
+            else {
                 Long pid = sysMenu.getPid();
+
+                // 如果父节点不是根节点
                 if (!pid.equals(0L)) {
                     SysMenu pSysMenu = this.getById(pid);
-                    //如果父节点不属于该应用，则无法修改其为该应用
+                    // 如果父节点不属于该应用，则无法修改其为该应用
                     if (!pSysMenu.getApplication().equals(sysMenu.getApplication())) {
                         throw new ServiceException(SysMenuExceptionEnum.MENU_PARENT_APPLICATION_ERROR);
                     }
                 }
             }
         }
+
         BeanUtil.copyProperties(sysMenuParam, sysMenu);
+
         this.fillPids(sysMenu);
+
         this.updateById(sysMenu);
     }
 
-    /**
-     * 查看系统菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 9:56
-     */
     @Override
     public SysMenu detail(SysMenuParam sysMenuParam) {
         return this.querySysMenu(sysMenuParam);
     }
 
-
-    /**
-     * 获取系统菜单树，用于新增编辑时获取上级菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/3/27 15:57
-     */
     @Override
     public List<MenuTreeNode> tree(SysMenuParam sysMenuParam) {
         List<MenuTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
@@ -356,12 +319,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return new TreeBuildFactory<MenuTreeNode>().doTreeBuild(menuTreeNodeList);
     }
 
-    /**
-     * 获取系统菜单树，用于给角色授权时选择
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 15:01
-     */
     @Override
     public List<MenuTreeNode> treeForGrant(SysMenuParam sysMenuParam) {
         List<MenuTreeNode> menuTreeNodeList = CollectionUtil.newArrayList();
@@ -406,12 +363,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return new TreeBuildFactory<MenuTreeNode>().doTreeBuild(menuTreeNodeList);
     }
 
-    /**
-     * 根据应用编码判断该机构下是否有状态为正常的菜单
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 12:17
-     */
     @Override
     public boolean hasMenu(String appCode) {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();

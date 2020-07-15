@@ -43,14 +43,8 @@ import java.util.List;
  * @date 2020/3/13 15:55
  */
 @Service
-public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMapper, SysRoleDataScope>implements SysRoleDataScopeService {
+public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMapper, SysRoleDataScope> implements SysRoleDataScopeService {
 
-    /**
-     * 授权数据
-     *
-     * @author xuyuxiang
-     * @date 2020/3/28 16:49
-     */
     @Override
     public void grantDataScope(SysRoleParam sysRoleParam) {
         Long roleId = sysRoleParam.getId();
@@ -67,16 +61,10 @@ public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMap
         });
     }
 
-    /**
-     * 根据角色id获取角色数据范围集合
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 18:24
-     */
     @Override
     public List<Long> getRoleDataScopeIdList(List<Long> roleIdList) {
         List<Long> resultList = CollectionUtil.newArrayList();
-        if(ObjectUtil.isNotEmpty(roleIdList)) {
+        if (ObjectUtil.isNotEmpty(roleIdList)) {
             LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.in(SysRoleDataScope::getRoleId, roleIdList);
             this.list(queryWrapper).forEach(sysRoleDataScope -> resultList.add(sysRoleDataScope.getOrgId()));
@@ -84,12 +72,6 @@ public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMap
         return resultList;
     }
 
-    /**
-     * 根据机构id集合删除对应的角色-数据范围关联信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:15
-     */
     @Override
     public void deleteRoleDataScopeListByOrgIdList(List<Long> orgIdList) {
         LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();
@@ -97,12 +79,6 @@ public class SysRoleDataScopeServiceImpl extends ServiceImpl<SysRoleDataScopeMap
         this.remove(queryWrapper);
     }
 
-    /**
-     * 根据角色id删除对应的角色-数据范围关联信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:48
-     */
     @Override
     public void deleteRoleDataScopeListByRoleId(Long roleId) {
         LambdaQueryWrapper<SysRoleDataScope> queryWrapper = new LambdaQueryWrapper<>();

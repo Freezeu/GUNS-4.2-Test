@@ -67,12 +67,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
     @Resource
     private SysMenuService sysMenuService;
 
-    /**
-     * 获取用户应用相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/3/13 16:27
-     */
     @Override
     public List<Dict> getLoginApps(Long userId) {
         List<Dict> userAppDictList = CollectionUtil.newArrayList();
@@ -125,12 +119,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         return userAppDictList;
     }
 
-    /**
-     * 查询系统应用分页
-     *
-     * @author xuyuxiang
-     * @date 2020/3/24 20:56
-     */
     @Override
     public PageResult<SysApp> page(SysAppParam sysAppParam) {
         LambdaQueryWrapper<SysApp> queryWrapper = new LambdaQueryWrapper<>();
@@ -148,12 +136,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         return new PageResult<>(this.page(PageFactory.defaultPage(), queryWrapper));
     }
 
-    /**
-     * 添加系统应用
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:54
-     */
     @Override
     public void add(SysAppParam sysAppParam) {
         //校验参数，检查是否存在相同的名称和编码，以及默认激活的系统的数量是否合理
@@ -164,12 +146,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         this.save(sysApp);
     }
 
-    /**
-     * 删除系统应用
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:59
-     */
     @Override
     public void delete(SysAppParam sysAppParam) {
         SysApp sysApp = this.querySysApp(sysAppParam);
@@ -184,12 +160,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         this.updateById(sysApp);
     }
 
-    /**
-     * 编辑系统应用
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:59
-     */
     @Override
     public void edit(SysAppParam sysAppParam) {
         SysApp sysApp = this.querySysApp(sysAppParam);
@@ -201,23 +171,11 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         this.updateById(sysApp);
     }
 
-    /**
-     * 查看系统应用
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 9:56
-     */
     @Override
     public SysApp detail(SysAppParam sysAppParam) {
         return this.querySysApp(sysAppParam);
     }
 
-    /**
-     * 系统应用列表
-     *
-     * @author xuyuxiang
-     * @date 2020/4/19 14:56
-     */
     @Override
     public List<SysApp> list(SysAppParam sysAppParam) {
         LambdaQueryWrapper<SysApp> appQueryWrapper = new LambdaQueryWrapper<>();
@@ -225,12 +183,6 @@ public class SysAppServiceImpl extends ServiceImpl<SysAppMapper, SysApp> impleme
         return this.list(appQueryWrapper);
     }
 
-    /**
-     * 设为默认应用
-     *
-     * @author xuyuxiang
-     * @date 2020/6/29 16:50
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void setAsDefault(SysAppParam sysAppParam) {

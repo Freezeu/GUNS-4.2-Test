@@ -43,13 +43,7 @@ import java.text.DecimalFormat;
  */
 @Service
 public class SysMachineServiceImpl implements SysMachineService {
-    
-    /**
-     * 系统属性监控
-     *
-     * @author xuyuxiang
-     * @date 2020/6/5 14:46
-     */
+
     @Override
     public SysMachineResult query() {
         JvmInfo jvmInfo = SystemUtil.getJvmInfo();

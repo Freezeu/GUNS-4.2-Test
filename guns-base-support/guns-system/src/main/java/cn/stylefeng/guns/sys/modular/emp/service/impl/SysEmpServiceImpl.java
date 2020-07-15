@@ -59,20 +59,13 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
     @Resource
     private SysEmpPosService sysEmpPosService;
 
-
-    /**
-     * 获取登录用户员工相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/3/13 16:27
-     */
     @Override
     public LoginEmpInfo getLoginEmpInfo(Long empId) {
 
         LoginEmpInfo loginEmpInfo = new LoginEmpInfo();
         //获取员工信息
         SysEmp sysEmp = this.getById(empId);
-        if(ObjectUtil.isNotNull(sysEmp)){
+        if (ObjectUtil.isNotNull(sysEmp)) {
             BeanUtil.copyProperties(sysEmp, loginEmpInfo);
             //获取附属机构和职位信息
             List<Dict> empExtOrgPosDictList = sysEmpExtOrgPosService.getEmpExtOrgPosDictList(sysEmp.getId(), false);
@@ -88,18 +81,12 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
         return loginEmpInfo;
     }
 
-    /**
-     * 获取用户员工相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 20:33
-     */
     @Override
     public SysEmpInfo getSysEmpInfo(Long empId) {
         SysEmpInfo sysEmpInfo = new SysEmpInfo();
         //获取员工信息
         SysEmp sysEmp = this.getById(empId);
-        if(ObjectUtil.isNotNull(sysEmp)){
+        if (ObjectUtil.isNotNull(sysEmp)) {
             BeanUtil.copyProperties(sysEmp, sysEmpInfo);
             //获取附属机构和职位信息
             List<Dict> empExtOrgPosDictList = sysEmpExtOrgPosService.getEmpExtOrgPosDictList(sysEmp.getId(), true);
@@ -115,18 +102,12 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
         return sysEmpInfo;
     }
 
-    /**
-     * 编辑员工相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 9:10
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addOrUpdate(SysEmpParam sysEmpParam) {
         Long empId = sysEmpParam.getId();
         SysEmp sysEmp = this.getById(empId);
-        if(ObjectUtil.isNull(sysEmp)) {
+        if (ObjectUtil.isNull(sysEmp)) {
             sysEmp = new SysEmp();
         }
         BeanUtil.copyProperties(sysEmpParam, sysEmp);
@@ -139,12 +120,6 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
         sysEmpPosService.addOrEdit(empId, posIdList);
     }
 
-    /**
-     * 修改员工相关机构信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/23 9:58
-     */
     @Override
     public void updateEmpOrgInfo(Long orgId, String orgName) {
         LambdaQueryWrapper<SysEmp> queryWrapper = new LambdaQueryWrapper<>();
@@ -155,12 +130,6 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
         });
     }
 
-    /**
-     * 根据机构id判断该机构下是否有员工
-     *
-     * @author xuyuxiang
-     * @date 2020/6/23 10:31
-     */
     @Override
     public boolean hasOrgEmp(Long orgId) {
         LambdaQueryWrapper<SysEmp> queryWrapper = new LambdaQueryWrapper<>();
@@ -169,12 +138,6 @@ public class SysEmpServiceImpl extends ServiceImpl<SysEmpMapper, SysEmp> impleme
         return list.size() != 0;
     }
 
-    /**
-     * 根据员工id删除对应的员工表信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:55
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteEmpInfoByUserId(Long empId) {

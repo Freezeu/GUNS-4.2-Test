@@ -66,12 +66,6 @@ public class SysEmpPosServiceImpl extends ServiceImpl<SysEmpPosMapper, SysEmpPos
      */
     private static final String POS_NAME_DICT_KEY = "posName";
 
-    /**
-     * 保存附属机构相关信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 9:01
-     */
     @Override
     public void addOrEdit(Long empId, List<Long> posIdList) {
         LambdaQueryWrapper<SysEmpPos> queryWrapper = new LambdaQueryWrapper<>();
@@ -89,12 +83,6 @@ public class SysEmpPosServiceImpl extends ServiceImpl<SysEmpPosMapper, SysEmpPos
         });
     }
 
-    /**
-     * 获取所属职位信息
-     *
-     * @author xuyuxiang
-     * @date 2020/4/2 20:07
-     */
     @Override
     public List<Dict> getEmpPosDictList(Long empId, boolean isFillId) {
         List<Dict> dictList = CollectionUtil.newArrayList();
@@ -106,7 +94,7 @@ public class SysEmpPosServiceImpl extends ServiceImpl<SysEmpPosMapper, SysEmpPos
             Dict dict = Dict.create();
             Long posId = sysEmpPos.getPosId();
             SysPos sysPos = sysPosService.getById(posId);
-            if(isFillId) {
+            if (isFillId) {
                 dict.put(POS_ID_DICT_KEY, posId);
             }
             dict.put(POS_CODE_DICT_KEY, sysPos.getCode());
@@ -116,12 +104,6 @@ public class SysEmpPosServiceImpl extends ServiceImpl<SysEmpPosMapper, SysEmpPos
         return dictList;
     }
 
-    /**
-     * 根据职位id判断该职位下是否有员工
-     *
-     * @author xuyuxiang
-     * @date 2020/6/23 10:41
-     */
     @Override
     public boolean hasPosEmp(Long posId) {
         LambdaQueryWrapper<SysEmpPos> queryWrapper = new LambdaQueryWrapper<>();
@@ -130,12 +112,6 @@ public class SysEmpPosServiceImpl extends ServiceImpl<SysEmpPosMapper, SysEmpPos
         return list.size() != 0;
     }
 
-    /**
-     * 根据员工id删除对用的员工-职位信息
-     *
-     * @author xuyuxiang
-     * @date 2020/6/28 14:58
-     */
     @Override
     public void deleteEmpPosInfoByUserId(Long empId) {
         LambdaQueryWrapper<SysEmpPos> queryWrapper = new LambdaQueryWrapper<>();

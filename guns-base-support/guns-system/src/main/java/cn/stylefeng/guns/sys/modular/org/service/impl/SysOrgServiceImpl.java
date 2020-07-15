@@ -81,12 +81,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Resource
     private SysUserDataScopeService sysUserDataScopeService;
 
-    /**
-     * 查询系统机构
-     *
-     * @author yubaoshan，fengshuonan
-     * @date 2020/5/11 15:49
-     */
     @Override
     public PageResult<SysOrg> page(SysOrgParam sysOrgParam) {
         LambdaQueryWrapper<SysOrg> queryWrapper = new LambdaQueryWrapper<>();
@@ -135,12 +129,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         return new PageResult<>(this.page(PageFactory.defaultPage(), queryWrapper));
     }
 
-    /**
-     * 系统组织机构列表
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 10:20
-     */
     @Override
     public List<SysOrg> list(SysOrgParam sysOrgParam) {
         LambdaQueryWrapper<SysOrg> queryWrapper = new LambdaQueryWrapper<>();
@@ -170,12 +158,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         return this.list(queryWrapper);
     }
 
-    /**
-     * 添加系统组织机构
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:54
-     */
     @Override
     public void add(SysOrgParam sysOrgParam) {
         //校验参数，检查是否存在相同的名称和编码
@@ -186,12 +168,12 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         //如果登录用户不是超级管理员
         if (!superAdmin) {
             //如果新增的机构父id不是0，则进行数据权限校验
-            if(!pid.equals(0L)) {
+            if (!pid.equals(0L)) {
                 List<Long> dataScope = sysOrgParam.getDataScope();
                 //数据范围为空
                 if (ObjectUtil.isEmpty(dataScope)) {
                     throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-                } else if(!dataScope.contains(pid)) {
+                } else if (!dataScope.contains(pid)) {
                     //所添加的组织机构的父机构不在自己的数据范围内
                     throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
                 }
@@ -208,12 +190,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         this.save(sysOrg);
     }
 
-    /**
-     * 删除系统组织机构
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:59
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(SysOrgParam sysOrgParam) {
@@ -225,7 +201,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(id)) {
+            } else if (!dataScope.contains(id)) {
                 //所操作的数据不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -258,12 +234,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     }
 
-    /**
-     * 编辑系统组织机构
-     *
-     * @author xuyuxiang
-     * @date 2020/3/25 14:59
-     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysOrgParam sysOrgParam) {
@@ -275,7 +245,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if(!dataScope.contains(id)) {
+            } else if (!dataScope.contains(id)) {
                 //所操作的数据不在自己的数据范围内
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
@@ -293,23 +263,11 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         this.updateById(sysOrg);
     }
 
-    /**
-     * 查看系统组织机构
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 9:56
-     */
     @Override
     public SysOrg detail(SysOrgParam sysOrgParam) {
         return this.querySysOrg(sysOrgParam);
     }
 
-    /**
-     * 获取组织机构树
-     *
-     * @author xuyuxiang
-     * @date 2020/3/26 14:12
-     */
     @Override
     public List<AntdTreeNode> tree(SysOrgParam sysOrgParam) {
         List<AntdTreeNode> treeNodeList = CollectionUtil.newArrayList();
@@ -348,13 +306,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         return new TreeBuildFactory<AntdTreeNode>().doTreeBuild(treeNodeList);
     }
 
-    /**
-     * 根据数据范围类型获取当前登录用户的数据范围id集合
-     * 1全部数据 2本部门及以下数据 3本部门数据 4仅本人数据
-     *
-     * @author xuyuxiang
-     * @date 2020/4/5 18:30
-     */
     @Override
     public List<Long> getDataScopeListByDataScopeType(Integer dataScopeType, Long orgId) {
         List<Long> resultList = CollectionUtil.newArrayList();
@@ -363,21 +314,19 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             return CollectionUtil.newArrayList();
         }
 
-        //本部门id集合，即自己
-        List<Long> thisOrgIdList = CollectionUtil.newArrayList();
-        thisOrgIdList.add(orgId);
-
-        //本部门及子节点id集合，包含自己
-        List<Long> thisOrgWithChildIdList = this.getChildIdListWithSelfById(orgId);
-
-        //1全部数据 2本部门及以下数据 3本部门数据 4仅本人数据
+        // 如果是范围类型是全部数据，则获取当前系统所有的组织架构id
         if (DataScopeTypeEnum.ALL.getCode().equals(dataScopeType)) {
             resultList = this.getOrgIdAll();
-        } else if (DataScopeTypeEnum.DEPT_WITH_CHILD.getCode().equals(dataScopeType)) {
-            resultList = thisOrgWithChildIdList;
-        } else if (DataScopeTypeEnum.DEPT.getCode().equals(dataScopeType)) {
-            resultList = thisOrgIdList;
         }
+        // 如果范围类型是本部门及以下部门，则查询本节点和子节点集合，包含本节点
+        else if (DataScopeTypeEnum.DEPT_WITH_CHILD.getCode().equals(dataScopeType)) {
+            resultList = this.getChildIdListWithSelfById(orgId);
+        }
+        // 如果数据范围是本部门，不含子节点，则直接返回本部门
+        else if (DataScopeTypeEnum.DEPT.getCode().equals(dataScopeType)) {
+            resultList.add(orgId);
+        }
+
         return resultList;
     }
 
@@ -410,9 +359,9 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         String code = sysOrgParam.getCode();
         Long pid = sysOrgParam.getPid();
         //如果父id不是根节点
-        if(!pid.equals(0L)) {
+        if (!pid.equals(0L)) {
             SysOrg pOrg = this.getById(pid);
-            if(ObjectUtil.isNull(pOrg)) {
+            if (ObjectUtil.isNull(pOrg)) {
                 //父机构不存在
                 throw new ServiceException(SysOrgExceptionEnum.ORG_NOT_EXIST);
             }
