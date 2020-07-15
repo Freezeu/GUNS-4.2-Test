@@ -247,32 +247,44 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public void edit(SysMenuParam sysMenuParam) {
+
         SysMenu sysMenu = this.querySysMenu(sysMenuParam);
+
         //校验参数
         checkParam(sysMenuParam, true);
+
         //如果应用有变化
         if (!sysMenuParam.getApplication().equals(sysMenu.getApplication())) {
-            //如果该菜单不为叶子节点，则将其子节点的数据全部修改为该应用
+
+            // 查找所有叶子节点，包含子节点的子节点
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.like(SysMenu::getPids, sysMenu.getId());
             List<SysMenu> list = this.list(queryWrapper);
+
+            // 更新所有子节点的应用为当前菜单的应用
             if (ObjectUtil.isNotEmpty(list)) {
-                list.forEach(child -> child.setApplication(sysMenu.getApplication()));
+                list.forEach(child -> child.setApplication(sysMenuParam.getApplication()));
                 this.updateBatchById(list);
-            } else {
-                //否则查询父节点
+            }
+            // 如果没有子几点，查询父节点
+            else {
                 Long pid = sysMenu.getPid();
+
+                // 如果父节点不是根节点
                 if (!pid.equals(0L)) {
                     SysMenu pSysMenu = this.getById(pid);
-                    //如果父节点不属于该应用，则无法修改其为该应用
+                    // 如果父节点不属于该应用，则无法修改其为该应用
                     if (!pSysMenu.getApplication().equals(sysMenu.getApplication())) {
                         throw new ServiceException(SysMenuExceptionEnum.MENU_PARENT_APPLICATION_ERROR);
                     }
                 }
             }
         }
+
         BeanUtil.copyProperties(sysMenuParam, sysMenu);
+
         this.fillPids(sysMenu);
+
         this.updateById(sysMenu);
     }
 
