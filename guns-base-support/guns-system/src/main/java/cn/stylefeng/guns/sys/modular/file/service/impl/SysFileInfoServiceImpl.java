@@ -32,12 +32,12 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
+import cn.stylefeng.guns.core.consts.MediaTypeConstant;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
 import cn.stylefeng.guns.core.exception.LibreOfficeException;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.factory.PageFactory;
 import cn.stylefeng.guns.core.pojo.page.PageResult;
-import cn.stylefeng.guns.core.util.LibreOfficeUtil;
 import cn.stylefeng.guns.sys.modular.file.entity.SysFileInfo;
 import cn.stylefeng.guns.sys.modular.file.enums.FileLocationEnum;
 import cn.stylefeng.guns.sys.modular.file.enums.SysFileInfoExceptionEnum;
@@ -240,7 +240,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
         //获取文件字节码
         fileBytes = sysFileInfoResult.getFileBytes();
         //如果是图片类型，则直接输出
-        if (LibreOfficeUtil.isPic(fileSuffix)) {
+        if (this.isPic(fileSuffix)) {
             try {
                 //设置contentType
                 response.setContentType("image/jpeg");
@@ -250,34 +250,6 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
                 IoUtil.write(outputStream, true, fileBytes);
             } catch (IOException e) {
                 throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
-            }
-
-        } else if (LibreOfficeUtil.isDoc(fileSuffix)) {
-            try {
-                //如果是文档类型，则使用libreoffice转换为pdf或html
-                InputStream inputStream = IoUtil.toStream(fileBytes);
-
-                //获取目标contentType（word和ppt和text转成pdf，excel转成html)
-                String targetContentType = LibreOfficeUtil.getTargetContentTypeBySuffix(fileSuffix);
-
-                //设置contentType
-                response.setContentType(targetContentType);
-
-                //获取outputStream
-                ServletOutputStream outputStream = response.getOutputStream();
-
-                //转换
-                LibreOfficeUtil.convertToPdf(inputStream, outputStream, fileSuffix);
-
-                //输出
-                IoUtil.write(outputStream, true, fileBytes);
-            } catch (IOException e) {
-                log.error(">>> 预览文件异常：{}", e.getMessage());
-                throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_NOT_SUPPORT);
-
-            } catch (LibreOfficeException e) {
-                log.error(">>> 初始化LibreOffice失败：{}", e.getMessage());
-                throw new ServiceException(SysFileInfoExceptionEnum.PREVIEW_ERROR_LIBREOFFICE);
             }
 
         } else {
@@ -317,6 +289,21 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             throw new ServiceException(SysFileInfoExceptionEnum.NOT_EXISTED);
         }
         return sysFileInfo;
+    }
+
+    /**
+     * 根据文件后缀判断是否图片
+     *
+     * @author xuyuxiang
+     * @date 2020/7/6 15:31
+     */
+    public boolean isPic(String fileSuffix) {
+        return MediaTypeConstant.IMG_JPG.equals(fileSuffix)
+                || MediaTypeConstant.IMG_JPEG.equals(fileSuffix)
+                || MediaTypeConstant.IMG_PNG.equals(fileSuffix)
+                || MediaTypeConstant.IMG_GIF.equals(fileSuffix)
+                || MediaTypeConstant.IMG_TIF.equals(fileSuffix)
+                || MediaTypeConstant.IMG_BMP.equals(fileSuffix);
     }
 
 }
