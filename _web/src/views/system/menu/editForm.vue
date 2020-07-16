@@ -279,6 +279,7 @@
   import IconSelector from '@/components/IconSelector'
   import { sysDictTypeDropDown } from '@/api/modular/system/dictManage'
   export default {
+    name:'menu_edit',
     components: {IconSelector},
 
     data () {
@@ -333,7 +334,7 @@
         this.sysDictTypeDropDown()
 
         //图标
-        this.currentSelectedIcon = record
+        this.currentSelectedIcon = record.icon
         //默认选中菜单项，并初始化
         this.form.getFieldDecorator('type',{valuePropName:'checked',initialValue:record.type.toString()})
         this.meneTypeFunc(record.type.toString(),record.openType.toString())
@@ -345,6 +346,7 @@
         }
         this.form.getFieldDecorator('weight',{valuePropName:'checked',initialValue:record.weight.toString()})
         this.form.getFieldDecorator('visible',{valuePropName:'checked',initialValue:this.visibleDef})
+        this.form.getFieldDecorator('icon',{initialValue:record.icon})
         setTimeout(()=>{
            this.setMenuItem(record)
           this.changeApplication(record.application)
@@ -366,7 +368,6 @@
             router:record.router,
             sort:record.sort,
             remark:record.remark,
-            icon:record.icon,
           }
         );
         this.form.getFieldDecorator('pid',{initialValue:record.pid})
@@ -491,6 +492,8 @@
           this.openType = '0'
           this.form.getFieldDecorator('openType',{initialValue:this.openType})
           this.openTypeDisabled = true
+          //取消icon
+          this.form.getFieldDecorator('icon',{initialValue:''})
         }
         this.meneOpenTypeFunc(this.openType)
       },
@@ -546,7 +549,10 @@
         this.visibleIcon=true
       },
       handleIconChange(icon){
+        //console.log('新图标：'+icon)
         this.form.getFieldDecorator('icon',{initialValue:icon})
+        //this.form.resetFields(`icon`,icon);
+
         this.visibleIcon=false
       },
       handleCancelIcon(){

@@ -461,6 +461,8 @@
           this.openType = '0'
           this.form.getFieldDecorator('openType',{initialValue:this.openType})
           this.openTypeDisabled = true
+          //取消icon
+          this.form.getFieldDecorator('icon',{initialValue:''})
         }
         this.meneOpenTypeFunc(this.openType)
       },
