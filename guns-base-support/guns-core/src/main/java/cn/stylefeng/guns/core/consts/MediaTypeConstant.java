@@ -61,39 +61,4 @@ public interface MediaTypeConstant {
      * 图片bmp格式
      */
     String IMG_BMP = "bmp";
-
-    /**
-     * 文档txt格式
-     */
-    String DOC_TXT = "txt";
-
-    /**
-     * 文档doc格式
-     */
-    String DOC_DOC = "doc";
-
-    /**
-     * 文档docx格式
-     */
-    String DOC_DOCX = "docx";
-
-    /**
-     * 文档xls格式
-     */
-    String DOC_XLS = "xls";
-
-    /**
-     * 文档xlsx格式
-     */
-    String DOC_XLSX = "xlsx";
-
-    /**
-     * 文档ppt格式
-     */
-    String DOC_PPT = "ppt";
-
-    /**
-     * 文档pptx格式
-     */
-    String DOC_PPTX = "pptx";
 }
