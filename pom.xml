@@ -140,28 +140,6 @@
                 <version>${easypoi.version}</version>
             </dependency>
 
-            <!--libreoffice文档在线预览-->
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-core</artifactId>
-                <version>${jodconverter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-local</artifactId>
-                <version>${jodconverter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jodconverter</groupId>
-                <artifactId>jodconverter-spring-boot-starter</artifactId>
-                <version>${jodconverter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.libreoffice</groupId>
-                <artifactId>ridl</artifactId>
-                <version>${libreoffice.version}</version>
-            </dependency>
-
         </dependencies>
 
     </dependencyManagement>
