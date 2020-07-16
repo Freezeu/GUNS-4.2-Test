@@ -67,12 +67,7 @@ public enum SysFileInfoExceptionEnum implements AbstractBaseExceptionEnum {
     /**
      * 预览文件异常
      */
-    PREVIEW_ERROR_NOT_SUPPORT(6, "预览文件异常，您预览的文件类型不支持或文件出现错误"),
-
-    /**
-     * 预览文件异常
-     */
-    PREVIEW_ERROR_LIBREOFFICE(7, "预览文件异常，请检查LibreOffice是否启动");
+    PREVIEW_ERROR_NOT_SUPPORT(6, "预览文件异常，您预览的文件类型不支持或文件出现错误");
 
     private final Integer code;
 
