@@ -27,6 +27,7 @@ package cn.stylefeng.guns.sys.core.filter.security;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import cn.stylefeng.guns.core.exception.AuthException;
 import cn.stylefeng.guns.core.exception.enums.ServerExceptionEnum;
 import cn.stylefeng.guns.core.pojo.login.SysLoginUser;
@@ -65,7 +66,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             doFilter(request, response, filterChain);
         } catch (Exception e) {
-            log.error(">>> 服务器运行异常：{}", e.getMessage());
+            log.error(">>> 服务器运行异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             ResponseUtil.responseExceptionError(response, ServerExceptionEnum.SERVER_ERROR.getCode(),
                     ServerExceptionEnum.SERVER_ERROR.getMessage(), e.getStackTrace()[0].toString());
         }

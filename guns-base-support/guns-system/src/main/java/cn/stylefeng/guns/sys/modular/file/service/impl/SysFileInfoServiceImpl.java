@@ -34,6 +34,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.consts.MediaTypeConstant;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import cn.stylefeng.guns.core.exception.LibreOfficeException;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.factory.PageFactory;
@@ -210,7 +211,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             // 返回文件字节码
             fileBytes = fileOperator.getFileBytes(DEFAULT_BUCKET, sysFileInfo.getFileObjectName());
         } catch (Exception e) {
-            log.error(">>> 获取文件流异常：{}", e.getMessage());
+            log.error(">>> 获取文件流异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             throw new ServiceException(SysFileInfoExceptionEnum.FILE_STREAM_ERROR);
         }
 
@@ -272,7 +273,7 @@ public class SysFileInfoServiceImpl extends ServiceImpl<SysFileInfoMapper, SysFi
             response.setContentType("application/octet-stream;charset=UTF-8");
             IoUtil.write(response.getOutputStream(), true, fileBytes);
         } catch (IOException e) {
-            log.error(">>> 下载文件异常：{}", e.getMessage());
+            log.error(">>> 下载文件异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             throw new ServiceException(DOWNLOAD_FILE_ERROR);
         }
     }

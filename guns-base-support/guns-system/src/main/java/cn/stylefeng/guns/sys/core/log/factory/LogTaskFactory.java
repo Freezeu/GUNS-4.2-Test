@@ -27,6 +27,7 @@ package cn.stylefeng.guns.sys.core.log.factory;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.annotion.BusinessLog;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import cn.stylefeng.guns.sys.modular.log.entity.SysOpLog;
 import cn.stylefeng.guns.sys.modular.log.entity.SysVisLog;
 import cn.stylefeng.guns.sys.modular.log.service.SysOpLogService;
@@ -64,7 +65,7 @@ public class LogTaskFactory {
                     LogFactory.createSysLoginLog(sysVisLog, account, success, failMessage);
                     sysVisLogService.save(sysVisLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建登录日志异常：{}", e.getMessage());
+                    log.error(">>> 创建登录日志异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
                 }
             }
         };
@@ -84,7 +85,7 @@ public class LogTaskFactory {
                     LogFactory.createSysExitLog(sysVisLog, account);
                     sysVisLogService.save(sysVisLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建退出日志异常：{}", e.getMessage());
+                    log.error(">>> 创建退出日志异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
                 }
             }
         };
@@ -104,7 +105,7 @@ public class LogTaskFactory {
                     LogFactory.createSysOperationLog(sysOpLog, account, businessLog, joinPoint, result);
                     sysOpLogService.save(sysOpLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建操作日志异常：{}", e.getMessage());
+                    log.error(">>> 创建操作日志异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
                 }
             }
         };
@@ -124,7 +125,7 @@ public class LogTaskFactory {
                     LogFactory.createSysExceptionLog(sysOpLog, account, businessLog, joinPoint, exception);
                     sysOpLogService.save(sysOpLog);
                 } catch (Exception e) {
-                    log.error(">>> 创建异常日志异常：{}", e.getMessage());
+                    log.error(">>> 创建异常日志异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
                 }
             }
         };

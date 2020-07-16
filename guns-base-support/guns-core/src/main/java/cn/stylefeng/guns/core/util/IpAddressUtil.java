@@ -30,6 +30,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import com.alibaba.fastjson.JSON;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +95,7 @@ public class IpAddressUtil {
             //根据url获取地址
             resultJson = HttpUtil.get(URL, genParamMap(ip));
         } catch (Exception e) {
-            log.error(">>> 根据ip定位异常：{}", e.getMessage());
+            log.error(">>> 根据ip定位异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             return resultJson;
         }
         if (ObjectUtil.isEmpty(resultJson)) {

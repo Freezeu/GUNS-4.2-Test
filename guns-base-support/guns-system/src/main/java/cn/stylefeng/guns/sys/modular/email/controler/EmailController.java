@@ -28,6 +28,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.mail.MailException;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.annotion.BusinessLog;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import cn.stylefeng.guns.core.enums.LogAnnotionOpTypeEnum;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.pojo.response.ResponseData;
@@ -81,7 +82,7 @@ public class EmailController {
         try {
             mailSender.sendMail(sendMailParam);
         } catch (MailException e) {
-            log.error(">>> 邮件发送异常：{}", e.getMessage());
+            log.error(">>> 邮件发送异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
         }
         return new SuccessResponseData();
@@ -113,7 +114,7 @@ public class EmailController {
         try {
             mailSender.sendMailHtml(sendMailParam);
         } catch (MailException e) {
-            log.error(">>> 邮件发送异常：{}", e.getMessage());
+            log.error(">>> 邮件发送异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             throw new ServiceException(SysEmailExceptionEnum.EMAIL_SEND_ERROR);
         }
         return new SuccessResponseData();

@@ -25,6 +25,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.guns.core.util;
 
 import cn.hutool.log.Log;
+import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
@@ -61,7 +62,7 @@ public class AopTargetUtils {
                 return getCglibProxyTargetObject(proxy);
             }
         } catch (Exception e) {
-            log.error(">>> 获取代理对象异常：{}", e.getMessage());
+            log.error(">>> 获取代理对象异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
             return null;
         }
     }
