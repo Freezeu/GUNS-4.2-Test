@@ -222,12 +222,19 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public void add(SysMenuParam sysMenuParam) {
-        //校验参数
+        // 校验参数
         checkParam(sysMenuParam, false);
+
         SysMenu sysMenu = new SysMenu();
         BeanUtil.copyProperties(sysMenuParam, sysMenu);
-        this.fillPids(sysMenu);
+
+        // 设置新的pid
+        String newPids = createNewPids(sysMenuParam.getPid());
+        sysMenu.setPids(newPids);
+
+        // 设置启用状态
         sysMenu.setStatus(CommonStatusEnum.ENABLE.getCode());
+
         this.save(sysMenu);
     }
 
@@ -253,15 +260,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 校验参数
         checkParam(sysMenuParam, true);
 
+        // 获取修改的菜单的旧数据（库中的）
         SysMenu oldMenu = this.querySysMenu(sysMenuParam);
 
         // 本菜单旧的pids
-        String oldPids = oldMenu.getPids();
         Long oldPid = oldMenu.getPid();
+        String oldPids = oldMenu.getPids();
 
-        // 填充新的pid和pids
-        oldMenu.setPid(sysMenuParam.getPid());
-        this.fillPids(oldMenu);
+        // 生成新的pid和pids
+        Long newPid = sysMenuParam.getPid();
+        String newPids = this.createNewPids(sysMenuParam.getPid());
 
         // 是否更新子应用的标识
         boolean updateSubAppsFlag = false;
@@ -279,7 +287,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
 
         // 父节点有变化
-        if (!sysMenuParam.getPid().equals(oldPid)) {
+        if (!newPid.equals(oldPid)) {
             updateSubPidsFlag = true;
         }
 
@@ -304,7 +312,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                         // 子节点pids组成 = 当前菜单新pids + 当前菜单id + 子节点自己的pids后缀
                         String oldPcodesPrefix = oldPids + "[" + oldMenu.getId() + "],";
                         String oldPcodesSuffix = child.getPids().substring(oldPcodesPrefix.length());
-                        String menuPcodes = oldMenu.getPids() + "[" + oldMenu.getId() + "]," + oldPcodesSuffix;
+                        String menuPcodes = newPids + "[" + oldMenu.getId() + "]," + oldPcodesSuffix;
                         child.setPids(menuPcodes);
                     });
                 }
@@ -315,6 +323,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 拷贝参数到实体中
         BeanUtil.copyProperties(sysMenuParam, oldMenu);
+
+        // 设置新的pids
+        oldMenu.setPids(newPids);
 
         this.updateById(oldMenu);
     }
@@ -491,21 +502,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 填充父ids
+     * 创建pids的值
+     * <p>
+     * 如果pid是0顶级节点，pids就是 [0],
+     * <p>
+     * 如果pid不是顶级节点，pids就是 pid菜单的pids + [pid] + ,
      *
-     * @author xuyuxiang
+     * @author xuyuxiang, stylefeng
      * @date 2020/3/26 11:28
      */
-    private void fillPids(SysMenu sysMenu) {
-        if (sysMenu.getPid().equals(0L)) {
-            sysMenu.setPids(SymbolConstant.LEFT_SQUARE_BRACKETS + 0 + SymbolConstant.RIGHT_SQUARE_BRACKETS
-                    + SymbolConstant.COMMA);
+    private String createNewPids(Long pid) {
+        if (pid.equals(0L)) {
+            return SymbolConstant.LEFT_SQUARE_BRACKETS + 0 + SymbolConstant.RIGHT_SQUARE_BRACKETS
+                    + SymbolConstant.COMMA;
         } else {
             //获取父菜单
-            SysMenu parentMenu = this.getById(sysMenu.getPid());
-            sysMenu.setPids(parentMenu.getPids()
-                    + SymbolConstant.LEFT_SQUARE_BRACKETS + parentMenu.getId() + SymbolConstant.RIGHT_SQUARE_BRACKETS
-                    + SymbolConstant.COMMA);
+            SysMenu parentMenu = this.getById(pid);
+            return parentMenu.getPids()
+                    + SymbolConstant.LEFT_SQUARE_BRACKETS + pid + SymbolConstant.RIGHT_SQUARE_BRACKETS
+                    + SymbolConstant.COMMA;
         }
     }
 
