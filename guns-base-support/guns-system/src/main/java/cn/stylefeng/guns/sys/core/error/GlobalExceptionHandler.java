@@ -29,6 +29,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.consts.CommonConstant;
+import cn.stylefeng.guns.core.consts.SymbolConstant;
 import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import cn.stylefeng.guns.core.exception.AuthException;
 import cn.stylefeng.guns.core.exception.DemoException;
@@ -342,11 +343,11 @@ public class GlobalExceptionHandler {
         //多个错误用逗号分隔
         List<ObjectError> allErrorInfos = bindingResult.getAllErrors();
         for (ObjectError error : allErrorInfos) {
-            stringBuilder.append(",").append(error.getDefaultMessage());
+            stringBuilder.append(SymbolConstant.COMMA).append(error.getDefaultMessage());
         }
 
         //最终把首部的逗号去掉
-        return StrUtil.removePrefix(stringBuilder.toString(), ",");
+        return StrUtil.removePrefix(stringBuilder.toString(), SymbolConstant.COMMA);
     }
 
 }
