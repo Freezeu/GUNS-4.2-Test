@@ -257,8 +257,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 本菜单旧的pids
         String oldPids = oldMenu.getPids();
+        Long oldPid = oldMenu.getPid();
 
-        // 填充新的pids
+        // 填充新的pid和pids
         oldMenu.setPid(sysMenuParam.getPid());
         this.fillPids(oldMenu);
 
@@ -271,14 +272,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 如果应用有变化
         if (!sysMenuParam.getApplication().equals(oldMenu.getApplication())) {
             // 父节点不是根节点不能移动应用
-            if (!oldMenu.getPid().equals(0L)) {
+            if (!oldPid.equals(0L)) {
                 throw new ServiceException(SysMenuExceptionEnum.CANT_MOVE_APP);
             }
             updateSubAppsFlag = true;
         }
 
         // 父节点有变化
-        if (!sysMenuParam.getPid().equals(oldMenu.getPid())) {
+        if (!sysMenuParam.getPid().equals(oldPid)) {
             updateSubPidsFlag = true;
         }
 
