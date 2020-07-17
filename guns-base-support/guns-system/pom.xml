@@ -107,17 +107,19 @@
             <artifactId>kernel-sms</artifactId>
         </dependency>
 
+        <!--默认配置了阿里云的短信-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.4.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-ecs</artifactId>
+            <version>4.17.6</version>
+        </dependency>
+
         <!--默认去掉第三方依赖，减少打包的体积，需要的话自行放开-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.aliyun</groupId>-->
-        <!--            <artifactId>aliyun-java-sdk-core</artifactId>-->
-        <!--            <version>4.4.6</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.aliyun</groupId>-->
-        <!--            <artifactId>aliyun-java-sdk-ecs</artifactId>-->
-        <!--            <version>4.17.6</version>-->
-        <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>com.tencentcloudapi</groupId>-->
         <!--            <artifactId>tencentcloud-sdk-java</artifactId>-->
