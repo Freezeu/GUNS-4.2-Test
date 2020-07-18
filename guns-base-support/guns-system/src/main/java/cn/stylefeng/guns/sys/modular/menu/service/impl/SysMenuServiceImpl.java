@@ -24,7 +24,6 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.guns.sys.modular.menu.service.impl;
 
-import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -457,6 +456,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 if (!urlSet.contains(permission.replaceAll(SymbolConstant.COLON, SymbolConstant.LEFT_DIVIDE))) {
                     throw new ServiceException(SysMenuExceptionEnum.MENU_PERMISSION_NOT_EXIST);
                 }
+            }
+        }
+
+        // 如果是编辑菜单时候，pid和id不能一致，一致会导致无限递归
+        if (isExcludeSelf) {
+            if (sysMenuParam.getId().equals(sysMenuParam.getPid())) {
+                throw new ServiceException(SysMenuExceptionEnum.PID_CANT_EQ_ID);
             }
         }
 

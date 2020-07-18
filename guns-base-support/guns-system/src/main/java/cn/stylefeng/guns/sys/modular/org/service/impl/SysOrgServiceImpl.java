@@ -237,27 +237,35 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SysOrgParam sysOrgParam) {
+
         SysOrg sysOrg = this.querySysOrg(sysOrgParam);
         Long id = sysOrg.getId();
+
+        // 检测此人数据范围能不能操作这个公司
         boolean superAdmin = LoginContextHolder.me().isSuperAdmin();
         if (!superAdmin) {
             List<Long> dataScope = sysOrgParam.getDataScope();
             //数据范围为空
             if (ObjectUtil.isEmpty(dataScope)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
-            } else if (!dataScope.contains(id)) {
-                //所操作的数据不在自己的数据范围内
+            }
+            //数据范围中不包含本公司
+            else if (!dataScope.contains(id)) {
                 throw new PermissionException(PermissionExceptionEnum.NO_PERMISSION_OPERATE);
             }
         }
+
         //校验参数，检查是否存在相同的名称和编码
         checkParam(sysOrgParam, true);
+
         //如果名称有变化，则修改对应员工的机构相关信息
         if (!sysOrg.getName().equals(sysOrgParam.getName())) {
             sysEmpService.updateEmpOrgInfo(sysOrg.getId(), sysOrg.getName());
         }
+
         BeanUtil.copyProperties(sysOrgParam, sysOrg);
         this.fillPids(sysOrg);
+
         //不能修改状态，用修改状态接口修改状态
         sysOrg.setStatus(null);
         this.updateById(sysOrg);
@@ -358,6 +366,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         String name = sysOrgParam.getName();
         String code = sysOrgParam.getCode();
         Long pid = sysOrgParam.getPid();
+
         //如果父id不是根节点
         if (!pid.equals(0L)) {
             SysOrg pOrg = this.getById(pid);
@@ -366,6 +375,14 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 throw new ServiceException(SysOrgExceptionEnum.ORG_NOT_EXIST);
             }
         }
+
+        // 如果是编辑，父id和自己的id不能一致
+        if (isExcludeSelf) {
+            if (sysOrgParam.getId().equals(sysOrgParam.getPid())) {
+                throw new ServiceException(SysOrgExceptionEnum.ID_CANT_EQ_PID);
+            }
+        }
+
         LambdaQueryWrapper<SysOrg> queryWrapperByName = new LambdaQueryWrapper<>();
         queryWrapperByName.eq(SysOrg::getName, name)
                 .ne(SysOrg::getStatus, CommonStatusEnum.DELETED.getCode());

@@ -87,7 +87,12 @@ public enum SysMenuExceptionEnum implements AbstractBaseExceptionEnum {
     /**
      * 不能移动根节点
      */
-    CANT_MOVE_APP(10, "父节点不是根节点不能移动应用");
+    CANT_MOVE_APP(10, "父节点不是根节点不能移动应用"),
+
+    /**
+     * 父级菜单不能为当前节点，请从新选择父级菜单
+     */
+    PID_CANT_EQ_ID(11, "父级菜单不能为当前节点，请从新选择父级菜单");
 
     private final Integer code;
 
