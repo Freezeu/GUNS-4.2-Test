@@ -49,7 +49,7 @@
               label="所属应用"
               has-feedback
             >
-              <a-select style="width: 100%" placeholder="请选择应用分类" v-decorator="['application', {rules: [{ required: true, message: '请选择应用分类！' }]}]" >
+              <a-select style="width: 100%" :disabled="appDisabled" placeholder="请选择应用分类" v-decorator="['application', {rules: [{ required: true, message: '请选择应用分类！' }]}]" >
                 <a-select-option v-for='(item,index) in appData' :key="index" :value="item.code" @click="changeApplication(item.code)">{{item.name}}</a-select-option>
               </a-select>
             </a-form-item>
@@ -83,6 +83,7 @@
                   :treeData="menuTreeData"
                   placeholder="请选择父级菜单"
                   treeDefaultExpandAll
+                  @change="setPid"
                 >
                   <span  slot="title" slot-scope="{ id }">{{ id }}
                   </span>
@@ -321,7 +322,20 @@
         linkRequired:true,
         linkDisabled:false,
         type:'',
+        pid:'',
+        appDisabled:false,
         form: this.$form.createForm(this),
+      }
+    },
+
+    watch: {
+      pid(val) {
+        if(val === '0'){
+           //再不能切换应用
+          this.appDisabled = false
+        }else{
+          this.appDisabled = true
+        }
       }
     },
 
@@ -371,6 +385,7 @@
           }
         );
         this.form.getFieldDecorator('pid',{initialValue:record.pid})
+        this.pid = record.pid
       },
 
       /**
@@ -391,6 +406,13 @@
           this.openTypeData=res.data
           this.formLoading=false
         })
+      },
+
+      /**
+       * 选择父级
+       */
+      setPid(value){
+        this.pid = value
       },
 
       getSysApplist() {
@@ -455,6 +477,7 @@
           this.componentRequired=true
           //父级初始化顶级，并将其隐藏
           this.form.getFieldDecorator('pid',{initialValue:'0'})
+          this.pid = '0'
           this.pidShow=false
         }else{
           if(type=='1'){
