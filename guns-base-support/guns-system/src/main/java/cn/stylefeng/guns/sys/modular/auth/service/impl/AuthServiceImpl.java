@@ -27,7 +27,6 @@ package cn.stylefeng.guns.sys.modular.auth.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.stylefeng.guns.core.consts.CommonConstant;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.enums.CommonStatusEnum;
@@ -52,6 +51,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -89,20 +89,10 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             throw new AuthException(AuthExceptionEnum.ACCOUNT_PWD_ERROR);
         }
 
-        String sysUserSalt = sysUser.getSalt();
-
-        //盐值不能为空
-        if (ObjectUtil.isEmpty(sysUserSalt)) {
-            LogManager.me().executeLoginLog(sysUser.getAccount(), LogSuccessStatusEnum.FAIL.getCode(), AuthExceptionEnum.USER_SALT_EMPTY.getMessage());
-            throw new AuthException(AuthExceptionEnum.USER_SALT_EMPTY);
-        }
-
-        String requestMd5 = SecureUtil.md5(password + sysUserSalt);
-
-        String passwordMd5 = sysUser.getPassword();
+        String passwordBCrypt = sysUser.getPassword();
 
         //验证账号密码是否正确
-        if (ObjectUtil.isEmpty(passwordMd5) || !requestMd5.equals(passwordMd5)) {
+        if (ObjectUtil.isEmpty(passwordBCrypt) || !BCrypt.checkpw(password, passwordBCrypt)) {
             LogManager.me().executeLoginLog(sysUser.getAccount(), LogSuccessStatusEnum.FAIL.getCode(), AuthExceptionEnum.ACCOUNT_PWD_ERROR.getMessage());
             throw new AuthException(AuthExceptionEnum.ACCOUNT_PWD_ERROR);
         }

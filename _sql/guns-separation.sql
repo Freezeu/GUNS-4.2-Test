@@ -778,11 +778,10 @@ DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
   `id` bigint(20) NOT NULL COMMENT '主键',
   `account` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '账号',
-  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `nick_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '员工姓名',
   `avatar` bigint(20) NULL DEFAULT NULL COMMENT '头像',
-  `salt` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'md5密码盐',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
   `sex` tinyint(4) NOT NULL COMMENT '性别(字典 1男 2女 3未知)',
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
@@ -802,10 +801,10 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1265476890672672808, 'superAdmin', '0c45ea6e80876cf93e49677873c6af22', '超级管理员', '超级管理员', NULL, 'r10kd', '2020-03-18', 1, 'superAdmin@qq.com', '15228937093', '12345678', '127.0.0.1', '2020-07-16 10:51:01', 1, 0, '2020-05-29 16:39:28', -1, '2020-07-16 10:51:01', -1);
-INSERT INTO `sys_user` VALUES (1275735541155614721, 'yubaoshan', 'bf93b090ac9289229e851ef5ca6cf20d', 'Await', '俞宝山', NULL, 'wbd7u', '1992-10-03', 1, 'await183@qq.com', '18200001102', '', '127.0.0.1', '2020-07-08 15:38:59', 2, 0, '2020-06-24 18:20:30', 1265476890672672808, '2020-07-08 15:48:39', 1265476890672672808);
-INSERT INTO `sys_user` VALUES (1280700700074041345, 'fengshuonan', 'fc7b5930be8bf14c64e9cb2f88f4b7f3', 'stylefeng', '冯硕楠', NULL, 'syh39', '2020-07-01', 1, NULL, '18200001103', NULL, '39.106.98.24', '2020-07-12 14:59:41', 2, 0, '2020-07-08 11:10:16', 1265476890672672808, '2020-07-12 14:59:41', -1);
-INSERT INTO `sys_user` VALUES (1280709549107552257, 'xuyuxiang', '2a4ff388bf923a7b3382fc904b015d2e', '就是那个锅', '徐玉祥', NULL, 'j4di1', '2020-07-01', 1, NULL, '18200001100', NULL, '127.0.0.1', '2020-07-09 10:58:59', 2, 0, '2020-07-08 11:45:26', 1265476890672672808, '2020-07-09 10:58:59', -1);
+INSERT INTO `sys_user` VALUES (1265476890672672808, 'superAdmin', '$2a$09$PiCiFNspSlTBE9CakVs8ZOqx0xa03X9wOm01gMasHch4929TpEWCC', '超级管理员', '超级管理员', NULL, '2020-03-18', 1, 'superAdmin@qq.com', '15228937093', '12345678', '127.0.0.1', '2020-07-16 10:51:01', 1, 0, '2020-05-29 16:39:28', -1, '2020-07-16 10:51:01', -1);
+INSERT INTO `sys_user` VALUES (1275735541155614721, 'yubaoshan', '$2a$09$PiCiFNspSlTBE9CakVs8ZOqx0xa03X9wOm01gMasHch4929TpEWCC', 'Await', '俞宝山', NULL, '1992-10-03', 1, 'await183@qq.com', '18200001102', '', '127.0.0.1', '2020-07-08 15:38:59', 2, 0, '2020-06-24 18:20:30', 1265476890672672808, '2020-07-08 15:48:39', 1265476890672672808);
+INSERT INTO `sys_user` VALUES (1280700700074041345, 'fengshuonan', '$2a$09$PiCiFNspSlTBE9CakVs8ZOqx0xa03X9wOm01gMasHch4929TpEWCC', 'stylefeng', '冯硕楠', NULL, '2020-07-01', 1, NULL, '18200001103', NULL, '39.106.98.24', '2020-07-12 14:59:41', 2, 0, '2020-07-08 11:10:16', 1265476890672672808, '2020-07-12 14:59:41', -1);
+INSERT INTO `sys_user` VALUES (1280709549107552257, 'xuyuxiang', '$2a$09$PiCiFNspSlTBE9CakVs8ZOqx0xa03X9wOm01gMasHch4929TpEWCC', '就是那个锅', '徐玉祥', NULL, '2020-07-01', 1, NULL, '18200001100', NULL, '127.0.0.1', '2020-07-09 10:58:59', 2, 0, '2020-07-08 11:45:26', 1265476890672672808, '2020-07-09 10:58:59', -1);
 
 -- ----------------------------
 -- Table structure for sys_user_data_scope

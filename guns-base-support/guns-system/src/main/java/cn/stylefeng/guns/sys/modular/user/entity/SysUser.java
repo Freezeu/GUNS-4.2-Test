@@ -80,11 +80,6 @@ public class SysUser extends BaseEntity {
     private Long avatar;
 
     /**
-     * md5密码盐
-     */
-    private String salt;
-
-    /**
      * 生日
      */
     @Excel(name = "生日", databaseFormat="yyyy-MM-dd HH:mm:ss", format = "yyyy-MM-dd", width = 20)
