@@ -235,6 +235,26 @@ public class ConstantContextHolder {
     }
 
     /**
+     * 获取阿里云定位接口
+     *
+     * @author xuyuxiang
+     * @date 2020/7/20 9:20
+     **/
+    public static String getIpGeoApi() {
+        return getSysConfig("GUNS_IP_GEO_API", String.class, false);
+    }
+
+    /**
+     * 获取阿里云定位appCode
+     *
+     * @author xuyuxiang
+     * @date 2020/7/20 10:33
+     **/
+    public static String getIpGeoAppCode() {
+        return getSysConfig("GUNS_IP_GEO_APP_CODE", String.class, false);
+    }
+
+    /**
      * 获取config表中的配置，如果为空返回默认值
      *
      * @param configCode   变量名称，对应sys_config表中的code
@@ -292,5 +312,4 @@ public class ConstantContextHolder {
             }
         }
     }
-
 }

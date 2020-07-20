@@ -74,6 +74,10 @@ INSERT INTO `sys_config` VALUES (1270380786649982741, 'Guns放开XSS过滤的接
 INSERT INTO `sys_config` VALUES (1270380786649982742, '单用户登陆的开关', 'GUNS_ENABLE_SINGLE_LOGIN', 'false', 'Y', '单用户登陆的开关，true-打开，false-关闭，如果一个人登录两次，就会将上一次登陆挤下去', 0, 'DEFAULT', '2020-06-09 23:42:37', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_config` VALUES (1280694183769792514, 'druid监控登录账号', 'GUNS_DRUID_USERNAME', '', 'Y', 'druid监控登录账号', 0, 'DEFAULT', '2020-07-08 10:44:22', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_config` VALUES (1280694281648070658, 'druid监控界面登录密码', 'GUNS_DRUID_PASSWORD', '', 'Y', 'druid监控登录密码', 0, 'DEFAULT', '2020-07-08 10:44:46', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_config` VALUES (1280694281648070659, '阿里云定位api接口地址', 'GUNS_IP_GEO_API', 'http://api01.aliyun.venuscn.com/ip?ip=%s', 'Y', '阿里云定位api接口地址', 0, 'DEFAULT', '2020-07-20 10:44:46', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_config` VALUES (1280694281648070660, '阿里云定位appCode', 'GUNS_IP_GEO_APP_CODE', '你的阿里云定位appCode', 'Y', '阿里云定位appCode', 0, 'DEFAULT', '2020-07-20 10:44:46', 1265476890672672808, NULL, NULL);
+
+
 
 -- ----------------------------
 -- Table structure for sys_dict_data

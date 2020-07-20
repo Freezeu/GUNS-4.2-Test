@@ -27,13 +27,21 @@ package cn.stylefeng.guns.core.util;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.log.Log;
+import cn.stylefeng.guns.core.consts.CommonConstant;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
+import cn.stylefeng.guns.core.context.constant.ConstantContext;
+import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,6 +89,7 @@ public class IpAddressUtil {
      * @author xuyuxiang
      * @date 2020/3/16 15:17
      */
+    @SuppressWarnings("unchecked")
     public static String getAddress(HttpServletRequest request) {
         String resultJson = SymbolConstant.DASH;
 
@@ -92,41 +101,22 @@ public class IpAddressUtil {
         }
 
         try {
-            //根据url获取地址
-            resultJson = HttpUtil.get(URL, genParamMap(ip));
+            //获取阿里云定位api接口
+            String api = ConstantContextHolder.getIpGeoApi();
+            //获取阿里云定位appCode
+            String appCode = ConstantContextHolder.getIpGeoAppCode();
+            if (ObjectUtil.isAllNotEmpty(api, appCode)) {
+                String path = "$['data']['country','region','city','isp']";
+                String appCodeSymbol = "APPCODE";
+                HttpRequest http = HttpUtil.createGet(String.format(api, ip));
+                http.header(CommonConstant.AUTHORIZATION, appCodeSymbol + " " + appCode);
+                resultJson = http.timeout(3000).execute().body();
+                resultJson = String.join("", (List<String>) JSONPath.read(resultJson, path));
+            }
         } catch (Exception e) {
             log.error(">>> 根据ip定位异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
-            return resultJson;
         }
-        if (ObjectUtil.isEmpty(resultJson)) {
-            return resultJson;
-        } else {
-            Object provinceObj = JSON.parseObject(resultJson).get(PROVINCE);
-            Object cityObj = JSON.parseObject(resultJson).get(CITY);
-
-            if (ObjectUtil.hasEmpty(provinceObj, cityObj)) {
-                return resultJson;
-            }
-
-            String province = provinceObj.toString();
-            String city = cityObj.toString();
-            //拼接 省+市 并返回
-            return province.equals(city) ? province : province + city;
-        }
-    }
-
-    /**
-     * 构造map参数
-     *
-     * @author xuyuxiang
-     * @date 2020/3/16 15:17
-     */
-    private static Map<String, Object> genParamMap(String ip) {
-        Map<String, Object> paramMap = CollectionUtil.newHashMap();
-        paramMap.put("ip", ip);
-        paramMap.put("output", OUTPUT);
-        paramMap.put("key", KEY);
-        return paramMap;
+        return resultJson;
     }
 
 }
