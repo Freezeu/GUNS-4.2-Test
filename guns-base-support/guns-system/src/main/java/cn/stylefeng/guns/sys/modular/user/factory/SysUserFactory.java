@@ -25,13 +25,12 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.guns.sys.modular.user.factory;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.sys.core.enums.AdminTypeEnum;
 import cn.stylefeng.guns.core.enums.CommonStatusEnum;
 import cn.stylefeng.guns.sys.core.enums.SexEnum;
 import cn.stylefeng.guns.sys.modular.user.entity.SysUser;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * 填充用户附加信息工厂
@@ -60,16 +59,12 @@ public class SysUserFactory {
      * @date 2020/3/23 16:50
      */
     public static void fillBaseUserInfo(SysUser sysUser) {
-        //盐值为空则设置盐值
-        if(ObjectUtil.isEmpty(sysUser.getSalt())) {
-            sysUser.setSalt(RandomUtil.randomString(5));
-        }
         //密码为空则设置密码
         if(ObjectUtil.isEmpty(sysUser.getPassword())) {
             //没有密码则设置默认密码
             String password = ConstantContextHolder.getDefaultPassWord();
             //设置密码为Md5加密后的密码
-            sysUser.setPassword(SecureUtil.md5(password + sysUser.getSalt()));
+            sysUser.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         }
 
         if(ObjectUtil.isEmpty(sysUser.getAvatar())) {

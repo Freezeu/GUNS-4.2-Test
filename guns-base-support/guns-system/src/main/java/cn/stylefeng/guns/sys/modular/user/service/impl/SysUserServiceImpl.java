@@ -28,7 +28,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.context.login.LoginContextHolder;
@@ -59,6 +58,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -181,6 +181,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = new SysUser();
         BeanUtil.copyProperties(sysUserParam, sysUser);
         SysUserFactory.fillAddCommonUserInfo(sysUser);
+        sysUser.setPassword(BCrypt.hashpw(sysUser.getPassword(), BCrypt.gensalt()));
         this.save(sysUser);
         Long sysUserId = sysUser.getId();
         //增加员工信息
@@ -351,18 +352,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void updatePwd(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
-        String passwordMd5 = SecureUtil.md5(sysUserParam.getPassword() + sysUser.getSalt());
-        String currentPwdMd5 = sysUser.getPassword();
-        //原密码错误
-        if (!passwordMd5.equals(currentPwdMd5)) {
-            throw new ServiceException(SysUserExceptionEnum.USER_PWD_ERROR);
-        }
-        String newPasswordMd5 = SecureUtil.md5(sysUserParam.getNewPassword() + sysUser.getSalt());
         //新密码与原密码相同
-        if (passwordMd5.equals(newPasswordMd5)) {
+        if (sysUserParam.getNewPassword().equals(sysUserParam.getPassword())) {
             throw new ServiceException(SysUserExceptionEnum.USER_PWD_REPEAT);
         }
-        sysUser.setPassword(newPasswordMd5);
+        //原密码错误
+        if (!BCrypt.checkpw(sysUserParam.getPassword(), sysUser.getPassword())) {
+            throw new ServiceException(SysUserExceptionEnum.USER_PWD_ERROR);
+        }
+        sysUser.setPassword(BCrypt.hashpw(sysUserParam.getNewPassword(), BCrypt.gensalt()));
         this.updateById(sysUser);
     }
 
@@ -408,7 +406,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void resetPwd(SysUserParam sysUserParam) {
         SysUser sysUser = this.querySysUser(sysUserParam);
         String password = ConstantContextHolder.getDefaultPassWord();
-        sysUser.setPassword(SecureUtil.md5(password + sysUser.getSalt()));
+        sysUser.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         this.updateById(sysUser);
     }
 
