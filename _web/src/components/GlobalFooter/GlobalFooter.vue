@@ -3,7 +3,7 @@
     <div class="links">
     </div>
     <div class="copyright">
-      Copyright © 2020 <a target="_blank" href="https://www.stylefeng.cn/">stylefeng</a> All rights reserved.
+      Copyright © 2020 <a target="_blank" href="https://www.stylefeng.cn/">stylefeng</a> All rights reserved. Guns-Seperation v1.1.0
     </div>
   </div>
 </template>
