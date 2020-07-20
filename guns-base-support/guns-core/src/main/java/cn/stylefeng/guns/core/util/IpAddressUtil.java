@@ -114,6 +114,7 @@ public class IpAddressUtil {
                 resultJson = String.join("", (List<String>) JSONPath.read(resultJson, path));
             }
         } catch (Exception e) {
+            resultJson = SymbolConstant.DASH;
             log.error(">>> 根据ip定位异常，请求号为：{}，具体信息为：{}", RequestNoContext.get(), e.getMessage());
         }
         return resultJson;
