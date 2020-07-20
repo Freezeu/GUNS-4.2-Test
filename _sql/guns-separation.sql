@@ -22,7 +22,7 @@ CREATE TABLE `sys_app`  (
 -- Records of sys_app
 -- ----------------------------
 INSERT INTO `sys_app` VALUES (1265476890672672821, '系统应用', 'system', 'Y', 0, '2020-03-25 19:07:00', 1265476890672672808, '2020-07-12 00:17:28', 1265476890672672808);
-INSERT INTO `sys_app` VALUES (1265476890672672822, '开发管理', 'devtools', 'N', 0, '2020-03-26 08:40:33', 1265476890672672808, '2020-07-08 12:01:48', 1265476890672672808);
+INSERT INTO `sys_app` VALUES (1265476890672672822, '业务应用', 'business', 'N', 0, '2020-03-26 08:40:33', 1265476890672672808, '2020-07-08 12:01:48', 1265476890672672808);
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -307,7 +307,7 @@ CREATE TABLE `sys_menu`  (
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1143468867767607297, 1265474261896806408, '[0],[1283308304890847233],[1265474261896806408],', '设为默认应用', 'sys_app_mgr_set_as_default', 2, '', '', '', 'sysApp:setAsDefault', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-03-27 17:14:56', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1264619904766685186, 0, '[0],', '开发管理', 'system_tools', 0, 'euro', '/tools', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 3, '', 0, '2020-05-25 02:10:55', 1265476890672672808, '2020-07-15 16:08:20', 1265476890672672808);
+INSERT INTO `sys_menu` VALUES (1264619904766685186, 0, '[0],', '开发管理', 'system_tools', 0, 'euro', '/tools', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 4, '', 0, '2020-05-25 02:10:55', 1265476890672672808, '2020-07-15 16:08:20', 1265476890672672808);
 INSERT INTO `sys_menu` VALUES (1264620409496645634, 1264619904766685186, '[0],[1264619904766685186],', '系统配置', 'system_tools_config', 1, '', '/config', 'system/config/index', '', 'system', 1, 'Y', NULL, '', 1, 1, '', 0, '2020-05-25 02:12:56', 1265476890672672808, '2020-07-15 16:08:27', 1265476890672672808);
 INSERT INTO `sys_menu` VALUES (1264622039642255361, 0, '[0],', '主控面板', 'system_index', 0, 'home', '/', 'RouteView', '', 'system', 0, 'Y', NULL, '/analysis', 1, 1, '', 0, '2020-05-25 02:19:24', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1264622671778394114, 1264622039642255361, '[0],[1264622039642255361],', '分析页', 'system_index_dashboard', 1, '', 'analysis', 'system/dashboard/Analysis', '', 'system', 0, 'Y', NULL, '', 1, 1, '', 0, '2020-05-25 02:21:55', 1265476890672672808, NULL, NULL);
@@ -349,7 +349,7 @@ INSERT INTO `sys_menu` VALUES (1265474261896806435, 1265474261896806430, '[0],[1
 INSERT INTO `sys_menu` VALUES (1265474261896806436, 1265474261896806430, '[0],[1283308304890847233],[1265474261896806430],', '角色授权数据', 'sys_role_mgr_grant_data', 2, '', '', '', 'sysRole:grantData', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 09:16:56', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1265474261896806437, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户授权角色', 'sys_user_mgr_grant_role', 2, '', '', '', 'sysUser:grantRole', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 09:22:01', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1265474261896806438, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户授权数据', 'sys_user_mgr_grant_data', 2, '', '', '', 'sysUser:grantData', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 09:22:13', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1265474261896806439, 0, '[0],', '日志管理', 'sys_log_mgr', 0, 'read', '/log', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 4, '', 0, '2020-04-01 09:25:01', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1265474261896806439, 0, '[0],', '日志管理', 'sys_log_mgr', 0, 'read', '/log', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 5, '', 0, '2020-04-01 09:25:01', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1265474261896806440, 1265474261896806439, '[0],[1265474261896806439],', '访问日志', 'sys_log_mgr_vis_log', 1, '', '/vislog', 'system/log/vislog/index', '', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 09:26:40', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1265474261896806441, 1265474261896806439, '[0],[1265474261896806439],', '操作日志', 'sys_log_mgr_op_log', 1, '', '/oplog', 'system/log/oplog/index', '', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 09:26:59', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1265474261896806442, 1264619904766685186, '[0],[1264619904766685186],', '字典管理', 'sys_dict_mgr', 1, '', '/dict', 'system/dict/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-04-01 11:17:26', 1265476890672672808, '2020-07-15 16:16:40', 1265476890672672808);
@@ -382,7 +382,7 @@ INSERT INTO `sys_menu` VALUES (1266266165173522433, 1265474261896806442, '[0],[1
 INSERT INTO `sys_menu` VALUES (1266274489566629889, 1265474261896806430, '[0],[1283308304890847233],[1265474261896806430],', '角色下拉', 'sys_role_mgr_drop_down', 2, '', '', '', 'sysRole:dropDown', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-05-29 15:45:39', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1267997057113899009, 1265474261896806424, '[0],[1283308304890847233],[1265474261896806424],', '菜单授权树', 'sys_menu_mgr_grant_tree', 2, '', '', '', 'sysMenu:treeForGrant', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-03 09:50:31', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1267997358927626241, 1265474261896806424, '[0],[1283308304890847233],[1265474261896806424],', '菜单切换', 'sys_menu_mgr_change', 2, '', '', '', 'sysMenu:change', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-03 09:51:43', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1268815024873418753, 0, '[0],', '系统监控', 'sys_monitor_mgr', 0, 'deployment-unit', '/monitor', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 5, '', 0, '2020-06-05 16:00:50', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1268815024873418753, 0, '[0],', '系统监控', 'sys_monitor_mgr', 0, 'deployment-unit', '/monitor', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 6, '', 0, '2020-06-05 16:00:50', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1268815296198750210, 1268815024873418753, '[0],[1268815024873418753],', '在线用户', 'sys_monitor_mgr_online_user', 1, '', '/onlineUser', 'system/onlineUser/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-06-05 16:01:55', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1268815479720521730, 1268815024873418753, '[0],[1268815024873418753],', '服务监控', 'sys_monitor_mgr_machine_monitor', 1, '', '/machine', 'system/machine/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-06-05 16:02:38', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1268815761716162561, 1268815296198750210, '[0],[1268815024873418753],[1268815296198750210],', '在线用户列表', 'sys_monitor_mgr_online_user_list', 2, '', '', '', 'sysOnlineUser:list', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-05 16:03:46', 1265476890672672808, NULL, NULL);
@@ -391,7 +391,7 @@ INSERT INTO `sys_menu` VALUES (1268816212092137474, 1268815479720521730, '[0],[1
 INSERT INTO `sys_menu` VALUES (1275265630030802946, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户修改状态', 'sys_user_mgr_change_status', 2, '', '', '', 'sysUser:changeStatus', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-23 11:13:14', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275266284937818114, 1265474261896806442, '[0],[1264619904766685186],[1265474261896806442],', '字典类型修改状态', 'sys_dict_mgr_dict_type_change_status', 2, '', '', '', 'sysDictType:changeStatus', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-23 11:15:50', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275266798761029633, 1265474261896806442, '[0],[1264619904766685186],[1265474261896806442],', '字典值修改状态', 'sys_dict_mgr_dict_change_status', 2, '', '', '', 'sysDictData:changeStatus', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-23 11:17:53', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1275723127652982786, 0, '[0],', '文件管理', 'sys_file_mgr', 0, 'file', '/file', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 7, '', 0, '2020-06-24 17:31:10', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1275723127652982786, 0, '[0],', '文件管理', 'sys_file_mgr', 0, 'file', '/file', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 8, '', 0, '2020-06-24 17:31:10', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275723575222968321, 1275723127652982786, '[0],[1275723127652982786],', '系统文件', 'sys_file_mgr_sys_file', 1, '', '/file', 'system/file/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:32:57', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275723960612397057, 1275723575222968321, '[0],[1275723127652982786],[1275723575222968321],', '文件上传', 'sys_file_mgr_sys_file_upload', 2, '', '', '', 'sysFileInfo:upload', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:34:29', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275724070897426433, 1275723575222968321, '[0],[1275723127652982786],[1275723575222968321],', '文件下载', 'sys_file_mgr_sys_file_download', 2, '', '', '', 'sysFileInfo:download', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:34:55', 1265476890672672808, NULL, NULL);
@@ -400,8 +400,8 @@ INSERT INTO `sys_menu` VALUES (1275724250875011074, 1275723575222968321, '[0],[1
 INSERT INTO `sys_menu` VALUES (1275724298933346306, 1275723575222968321, '[0],[1275723127652982786],[1275723575222968321],', '文件列表', 'sys_file_mgr_sys_file_list', 2, '', '', '', 'sysFileInfo:list', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:35:49', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275724346723246081, 1275723575222968321, '[0],[1275723127652982786],[1275723575222968321],', '文件详情', 'sys_file_mgr_sys_file_detail', 2, '', '', '', 'sysFileInfo:detail', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:36:01', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1275724389635170305, 1275723575222968321, '[0],[1275723127652982786],[1275723575222968321],', '文件删除', 'sys_file_mgr_sys_file_delete', 2, '', '', '', 'sysFileInfo:delete', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-24 17:36:11', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1277153538518061058, 1268815024873418753, '[0],[1268815024873418753],', '数据监控', 'sys_monitor_mgr_druid', 1, '', '/druid', 'Iframe', '', 'system', 2, 'Y', 'http://localhost:82/druid', '', 1, 100, NULL, 0, '2020-06-28 16:15:07', 1265476890672672808, '2020-07-12 15:15:07', 1265476890672672808);
-INSERT INTO `sys_menu` VALUES (1277507562966740993, 0, '[0],', '通知公告', 'sys_notice', 0, 'sound', '/notice', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 6, '', 0, '2020-06-29 15:41:53', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1277153538518061058, 1268815024873418753, '[0],[1268815024873418753],', '数据监控', 'sys_monitor_mgr_druid', 1, '', '/druid', 'Iframe', '', 'system', 2, 'Y', 'https://sep.stylefeng.cn/api/druid/login.html', '', 1, 100, NULL, 0, '2020-06-28 16:15:07', 1265476890672672808, '2020-07-12 15:15:07', 1265476890672672808);
+INSERT INTO `sys_menu` VALUES (1277507562966740993, 0, '[0],', '通知公告', 'sys_notice', 0, 'sound', '/notice', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 7, '', 0, '2020-06-29 15:41:53', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1277508198718369793, 1277507562966740993, '[0],[1277507562966740993],', '公告管理', 'sys_notice_mgr', 1, '', '/notice', 'system/notice/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 15:44:24', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1277508476016390146, 1277508198718369793, '[0],[1277507562966740993],[1277508198718369793],', '公告查询', 'sys_notice_mgr_page', 2, '', '', '', 'sysNotice:page', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 15:45:30', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1277508587207389185, 1277508198718369793, '[0],[1277507562966740993],[1277508198718369793],', '公告增加', 'sys_notice_mgr_add', 2, '', '', '', 'sysNotice:add', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 15:45:57', 1265476890672672808, NULL, NULL);
@@ -411,7 +411,7 @@ INSERT INTO `sys_menu` VALUES (1277508737703211009, 1277508198718369793, '[0],[1
 INSERT INTO `sys_menu` VALUES (1277508811346800641, 1277508198718369793, '[0],[1277507562966740993],[1277508198718369793],', '公告修改状态', 'sys_notice_mgr_changeStatus', 2, '', '', '', 'sysNotice:changeStatus', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 15:46:50', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1277520397092302850, 1277507562966740993, '[0],[1277507562966740993],', '已收公告', 'sys_notice_mgr_received', 1, '', '/noticeReceived', 'system/noticeReceived/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 16:32:53', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1277520608506195969, 1277520397092302850, '[0],[1277507562966740993],[1277520397092302850],', '已收公告查询', 'sys_notice_mgr_received_page', 2, '', '', '', 'sysNotice:received', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-06-29 16:33:43', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1278256363012624386, 0, '[0],', '定时任务', 'sys_timers', 0, 'dashboard', '/timers', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 8, '', 0, '2020-07-01 17:17:20', 1265476890672672808, NULL, NULL);
+INSERT INTO `sys_menu` VALUES (1278256363012624386, 0, '[0],', '定时任务', 'sys_timers', 0, 'dashboard', '/timers', 'PageView', '', 'system', 1, 'Y', NULL, '', 1, 9, '', 0, '2020-07-01 17:17:20', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1278256750994132994, 1278256363012624386, '[0],[1278256363012624386],', '任务管理', 'sys_timers_mgr', 1, '', '/timers', 'system/timers/index', '', 'system', 1, 'Y', NULL, '', 1, 100, '', 0, '2020-07-01 17:18:53', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1278256962458357762, 1278256750994132994, '[0],[1278256363012624386],[1278256750994132994],', '定时任务查询', 'sys_timers_mgr_page', 2, '', '', '', 'sysTimers:page', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-07-01 17:19:43', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1278257016556490753, 1278256750994132994, '[0],[1278256363012624386],[1278256750994132994],', '定时任务列表', 'sys_timers_mgr_list', 2, '', '', '', 'sysTimers:list', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-07-01 17:19:56', 1265476890672672808, NULL, NULL);
@@ -445,7 +445,7 @@ INSERT INTO `sys_menu` VALUES (1278544017260281858, 1265474261896806403, '[0],[1
 INSERT INTO `sys_menu` VALUES (1278544348966813698, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户修改头像', 'sys_user_mgr_update_avatar', 2, '', '', '', 'sysUser:updateAvatar', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-07-02 12:21:42', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1278544420391616514, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户导出', 'sys_user_mgr_export', 2, '', '', '', 'sysUser:export', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-07-02 12:21:59', 1265476890672672808, NULL, NULL);
 INSERT INTO `sys_menu` VALUES (1278923983416270850, 1265474261896806403, '[0],[1265474261896806402],[1265474261896806403],', '用户选择器', 'sys_user_mgr_selector', 2, '', '', '', 'sysUser:selector', 'system', 0, 'Y', NULL, '', 1, 100, '', 0, '2020-07-03 13:30:14', 1265476890672672808, NULL, NULL);
-INSERT INTO `sys_menu` VALUES (1283308304890847233, 0, '[0],', '权限管理', 'auth_manager', 0, 'safety-certificate', '/auth', 'PageView', '', 'system', 0, 'Y', NULL, '', 1, 100, NULL, 0, '2020-07-15 15:51:57', 1265476890672672808, '2020-07-15 15:54:21', 1265476890672672808);
+INSERT INTO `sys_menu` VALUES (1283308304890847233, 0, '[0],', '权限管理', 'auth_manager', 0, 'safety-certificate', '/auth', 'PageView', '', 'system', 0, 'Y', NULL, '', 1, 3, NULL, 0, '2020-07-15 15:51:57', 1265476890672672808, '2020-07-15 15:54:21', 1265476890672672808);
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -721,6 +721,7 @@ INSERT INTO `sys_role_menu` VALUES (1283595843405033473, 1265476890672672818, 12
 INSERT INTO `sys_role_menu` VALUES (1283595843405033474, 1265476890672672818, 1266253721189457921);
 INSERT INTO `sys_role_menu` VALUES (1283595843413422082, 1265476890672672818, 1266274489566629889);
 INSERT INTO `sys_role_menu` VALUES (1283595843417616385, 1265476890672672818, 1278538248938889218);
+INSERT INTO `sys_role_menu` VALUES (1283595843417616386, 1265476890672672818, 1265474261896806418);
 INSERT INTO `sys_role_menu` VALUES (1283595945167237121, 1265476890672672819, 1277507562966740993);
 INSERT INTO `sys_role_menu` VALUES (1283595945184014337, 1265476890672672819, 1277520397092302850);
 INSERT INTO `sys_role_menu` VALUES (1283595945184014338, 1265476890672672819, 1277520608506195969);
@@ -731,6 +732,7 @@ INSERT INTO `sys_role_menu` VALUES (1283595945209180161, 1265476890672672819, 12
 INSERT INTO `sys_role_menu` VALUES (1283595945217568769, 1265476890672672819, 1277508645722124290);
 INSERT INTO `sys_role_menu` VALUES (1283595945217568770, 1265476890672672819, 1277508692291481601);
 INSERT INTO `sys_role_menu` VALUES (1283595945225957378, 1265476890672672819, 1277508811346800641);
+INSERT INTO `sys_role_menu` VALUES (1283595945225957379, 1265476890672672819, 1278923983416270850);
 
 -- ----------------------------
 -- Table structure for sys_sms
@@ -784,7 +786,7 @@ CREATE TABLE `sys_user`  (
   `account` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '账号',
   `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `nick_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '员工姓名',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `avatar` bigint(20) NULL DEFAULT NULL COMMENT '头像',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
   `sex` tinyint(4) NOT NULL COMMENT '性别(字典 1男 2女 3未知)',
@@ -857,7 +859,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1283596900713574402, 1275735541155614721, 1265476890672672817);
 INSERT INTO `sys_user_role` VALUES (1283596920384860162, 1280700700074041345, 1265476890672672819);
-INSERT INTO `sys_user_role` VALUES (1283596949627547649, 1280709549107552257, 1265476890672672817);
+INSERT INTO `sys_user_role` VALUES (1283596949627547649, 1280709549107552257, 1265476890672672818);
 
 -- ----------------------------
 -- Table structure for sys_vis_log
