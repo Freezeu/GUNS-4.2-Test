@@ -24,25 +24,19 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
  */
 package cn.stylefeng.guns.core.util;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.log.Log;
 import cn.stylefeng.guns.core.consts.CommonConstant;
 import cn.stylefeng.guns.core.consts.SymbolConstant;
-import cn.stylefeng.guns.core.context.constant.ConstantContext;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.context.requestno.RequestNoContext;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 根据ip地址定位工具类，使用高德地地图定位api
@@ -57,16 +51,6 @@ public class IpAddressUtil {
     private static final String LOCAL_IP = "127.0.0.1";
 
     private static final String LOCAL_REMOTE_HOST = "0:0:0:0:0:0:0:1";
-
-    private static final String URL = "https://restapi.amap.com/v3/ip";
-
-    private static final String OUTPUT = "json";
-
-    private static final String KEY = "c58799c473c985adf19f30437f12efee";
-
-    private static final String PROVINCE = "province";
-
-    private static final String CITY = "city";
 
     /**
      * 获取客户端ip
