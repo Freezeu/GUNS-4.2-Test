@@ -26,6 +26,7 @@ package cn.stylefeng.guns.core.util;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.log.Log;
@@ -62,7 +63,7 @@ public class IpAddressUtil {
         if (ObjectUtil.isEmpty(request)) {
             return LOCAL_IP;
         } else {
-            String remoteHost = request.getRemoteHost();
+            String remoteHost = ServletUtil.getClientIP(request);
             return LOCAL_REMOTE_HOST.equals(remoteHost) ? LOCAL_IP : remoteHost;
         }
     }
