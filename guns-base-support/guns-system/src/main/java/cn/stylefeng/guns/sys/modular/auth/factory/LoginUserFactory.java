@@ -34,7 +34,7 @@ import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.exception.enums.ServerExceptionEnum;
 import cn.stylefeng.guns.core.pojo.login.LoginEmpInfo;
 import cn.stylefeng.guns.core.pojo.login.SysLoginUser;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import cn.stylefeng.guns.core.util.IpAddressUtil;
 import cn.stylefeng.guns.core.util.UaUtil;
 import cn.stylefeng.guns.sys.modular.app.service.SysAppService;
@@ -71,7 +71,7 @@ public class LoginUserFactory {
      * @date 2020/3/13 15:01
      */
     public static void fillLoginUserInfo(SysLoginUser sysLoginUser) {
-        HttpServletRequest request = HttpServeletUtil.getRequest();
+        HttpServletRequest request = HttpServletUtil.getRequest();
         if (ObjectUtil.isNotNull(request)) {
             sysLoginUser.setLastLoginIp(IpAddressUtil.getIp(request));
             sysLoginUser.setLastLoginTime(DateTime.now().toString());

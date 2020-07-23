@@ -35,7 +35,7 @@ import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.exception.enums.AuthExceptionEnum;
 import cn.stylefeng.guns.core.exception.enums.ServerExceptionEnum;
 import cn.stylefeng.guns.core.pojo.login.SysLoginUser;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import cn.stylefeng.guns.core.util.IpAddressUtil;
 import cn.stylefeng.guns.sys.core.cache.UserCache;
 import cn.stylefeng.guns.sys.core.enums.LogSuccessStatusEnum;
@@ -150,7 +150,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     @Override
     public void logout() {
 
-        HttpServletRequest request = HttpServeletUtil.getRequest();
+        HttpServletRequest request = HttpServletUtil.getRequest();
 
         if (ObjectUtil.isNotNull(request)) {
 
@@ -263,7 +263,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         this.cacheLoginUser(jwtPayLoad, sysLoginUser);
 
         //设置最后登录ip和时间
-        sysUser.setLastLoginIp(IpAddressUtil.getIp(HttpServeletUtil.getRequest()));
+        sysUser.setLastLoginIp(IpAddressUtil.getIp(HttpServletUtil.getRequest()));
         sysUser.setLastLoginTime(DateTime.now());
 
         //更新用户登录信息

@@ -62,7 +62,7 @@ public class PoiUtil {
      */
     public static void exportExcelWithStream(String excelName, Class pojoClass, Collection data) {
         try {
-            HttpServletResponse response = HttpServeletUtil.getResponse();
+            HttpServletResponse response = HttpServletUtil.getResponse();
             String fileName = URLEncoder.encode(excelName, "UTF-8");
             response.reset();
             response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");

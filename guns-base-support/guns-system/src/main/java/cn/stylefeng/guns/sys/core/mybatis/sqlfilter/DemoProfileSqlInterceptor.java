@@ -27,7 +27,7 @@ package cn.stylefeng.guns.sys.core.mybatis.sqlfilter;
 import cn.stylefeng.guns.core.consts.SpringSecurityConstant;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.exception.DemoException;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -70,7 +70,7 @@ public class DemoProfileSqlInterceptor implements Interceptor {
             //放开不进行安全过滤的接口
             for (String notAuthResource : SpringSecurityConstant.NONE_SECURITY_URL_PATTERNS) {
                 AntPathMatcher antPathMatcher = new AntPathMatcher();
-                if (antPathMatcher.match(notAuthResource, HttpServeletUtil.getRequest().getRequestURI())) {
+                if (antPathMatcher.match(notAuthResource, HttpServletUtil.getRequest().getRequestURI())) {
                     return invocation.proceed();
                 }
             }

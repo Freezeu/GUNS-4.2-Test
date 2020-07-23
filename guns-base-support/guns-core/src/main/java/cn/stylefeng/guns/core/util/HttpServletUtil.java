@@ -33,12 +33,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * HttpServelet工具类，获取当前request和response
+ * HttpServlet工具类，获取当前request和response
  *
  * @author xuyuxiang
  * @date 2020/3/30 15:09
  */
-public class HttpServeletUtil {
+public class HttpServletUtil {
 
     /**
      * 获取当前请求的request对象

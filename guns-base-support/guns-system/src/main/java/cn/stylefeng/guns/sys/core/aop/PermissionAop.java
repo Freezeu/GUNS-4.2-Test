@@ -32,7 +32,7 @@ import cn.stylefeng.guns.core.context.login.LoginContextHolder;
 import cn.stylefeng.guns.core.enums.LogicTypeEnum;
 import cn.stylefeng.guns.core.exception.PermissionException;
 import cn.stylefeng.guns.core.exception.enums.PermissionExceptionEnum;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import cn.stylefeng.guns.sys.core.log.LogManager;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -91,7 +91,7 @@ public class PermissionAop {
 
             //如果不需要特别的角色，则判断用户所属角色是否有当前访问的url的权限
             if (requireRoles.length == 0) {
-                HttpServletRequest request = HttpServeletUtil.getRequest();
+                HttpServletRequest request = HttpServletUtil.getRequest();
                 boolean flag = LoginContextHolder.me().hasPermission(request.getRequestURI());
                 if (!flag) {
                     this.executeNoPermissionExceptionLog(joinPoint, new PermissionException(PermissionExceptionEnum.NO_PERMISSION));

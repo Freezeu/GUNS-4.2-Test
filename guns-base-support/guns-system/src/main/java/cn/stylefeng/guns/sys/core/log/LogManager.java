@@ -29,7 +29,7 @@ import cn.stylefeng.guns.core.annotion.BusinessLog;
 import cn.stylefeng.guns.core.context.constant.ConstantContextHolder;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.exception.enums.ServerExceptionEnum;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import cn.stylefeng.guns.core.util.IpAddressUtil;
 import cn.stylefeng.guns.core.util.UaUtil;
 import cn.stylefeng.guns.sys.core.log.factory.LogFactory;
@@ -142,7 +142,7 @@ public class LogManager {
      * @date 2020/3/19 14:44
      */
     private SysVisLog genBaseSysVisLog() {
-        HttpServletRequest request = HttpServeletUtil.getRequest();
+        HttpServletRequest request = HttpServletUtil.getRequest();
         if (ObjectUtil.isNotNull(request)) {
             String ip = IpAddressUtil.getIp(request);
             String address = IpAddressUtil.getAddress(request);
@@ -161,7 +161,7 @@ public class LogManager {
      * @date 2020/3/19 14:44
      */
     private SysOpLog genBaseSysOpLog() {
-        HttpServletRequest request = HttpServeletUtil.getRequest();
+        HttpServletRequest request = HttpServletUtil.getRequest();
         if (ObjectUtil.isNotNull(request)) {
             String ip = IpAddressUtil.getIp(request);
             String address = IpAddressUtil.getAddress(request);

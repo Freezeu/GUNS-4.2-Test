@@ -25,7 +25,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.guns.core.factory;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.stylefeng.guns.core.util.HttpServeletUtil;
+import cn.stylefeng.guns.core.util.HttpServletUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +60,7 @@ public class PageFactory {
         int pageSize = 20;
         int pageNo = 1;
 
-        HttpServletRequest request = HttpServeletUtil.getRequest();
+        HttpServletRequest request = HttpServletUtil.getRequest();
 
         //每页条数
         String pageSizeString = request.getParameter(PAGE_SIZE_PARAM_NAME);
