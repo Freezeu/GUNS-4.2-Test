@@ -33,7 +33,7 @@
     </div>
 
     <div class="table-operator" v-if="hasPerm('sysDictData:add')" >
-      <a-button type="primary" v-if="hasPerm('sysDictData:add')" icon="plus" @click="$refs.addForm.add()">新增数据</a-button>
+      <a-button type="primary" v-if="hasPerm('sysDictData:add')" icon="plus" @click="$refs.addForm.add(typeId)">新增数据</a-button>
     </div>
 
     <s-table
