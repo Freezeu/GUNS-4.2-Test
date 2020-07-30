@@ -31,6 +31,7 @@ import cn.stylefeng.guns.core.enums.CommonStatusEnum;
 import cn.stylefeng.guns.core.enums.YesOrNotEnum;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.factory.PageFactory;
+import cn.stylefeng.guns.core.pojo.base.entity.BaseEntity;
 import cn.stylefeng.guns.core.pojo.page.PageResult;
 import cn.stylefeng.guns.sys.modular.consts.entity.SysConfig;
 import cn.stylefeng.guns.sys.modular.consts.enums.SysConfigExceptionEnum;
@@ -59,7 +60,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         //构造查询条件
         LambdaQueryWrapper<SysConfig> queryWrapper = new LambdaQueryWrapper<>();
 
-        if(ObjectUtil.isNotNull(sysConfigParam)) {
+        if (ObjectUtil.isNotNull(sysConfigParam)) {
             //如果名称不为空，则带上名称搜素搜条件
             if (ObjectUtil.isNotEmpty(sysConfigParam.getName())) {
                 queryWrapper.like(SysConfig::getName, sysConfigParam.getName());
@@ -76,6 +77,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
         //查询未删除的
         queryWrapper.ne(SysConfig::getStatus, CommonStatusEnum.DELETED.getCode());
+
+        //按时间倒序排列
+        queryWrapper.orderByDesc(BaseEntity::getCreateTime);
 
         //查询分页结果
         return new PageResult<>(this.page(PageFactory.defaultPage(), queryWrapper));

@@ -775,7 +775,7 @@ CREATE TABLE `sys_timers`  (
 -- ----------------------------
 -- Records of sys_timers
 -- ----------------------------
-INSERT INTO `sys_timers` VALUES (1277952546828189698, '定时删除缓存', 'cn.stylefeng.guns.sys.modular.timer.tasks.SystemOutTaskRunner', '*/2 * * * * *', 2, '删除的是redis没用的东西', '2020-06-30 21:10:05', 1265476890672672808, '2020-07-07 16:01:57', 1265476890672672808);
+INSERT INTO `sys_timers` VALUES (1277952546828189698, '定时同步缓存常量', 'cn.stylefeng.guns.sys.modular.timer.tasks.RefreshConstantsTaskRunner', '0 0/1 * * * ?', 1, '定时同步sys_config表的数据到缓存常量中', '2020-7-30 16:53:13', 1265476890672672808, '2020-7-30 16:53:18', 1265476890672672808);
 
 -- ----------------------------
 -- Table structure for sys_user
