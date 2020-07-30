@@ -31,7 +31,7 @@ import cn.stylefeng.guns.core.enums.CommonStatusEnum;
 import cn.stylefeng.guns.core.enums.YesOrNotEnum;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.factory.PageFactory;
-import cn.stylefeng.guns.core.pojo.base.entity.BaseEntity;
+import cn.stylefeng.guns.core.pojo.base.BaseEntity;
 import cn.stylefeng.guns.core.pojo.page.PageResult;
 import cn.stylefeng.guns.sys.modular.consts.entity.SysConfig;
 import cn.stylefeng.guns.sys.modular.consts.enums.SysConfigExceptionEnum;
