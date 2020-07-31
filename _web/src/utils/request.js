@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import {Modal,notification,message} from 'ant-design-vue'///es/notification
+import { message, Modal, notification } from 'ant-design-vue' ///es/notification
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -25,7 +25,7 @@ const err = (error) => {
       })
     }
     if (error.response.status === 500) {
-      if(data.message.length>0){
+      if (data.message.length > 0) {
         message.error(data.message)
       }
     }
@@ -50,7 +50,7 @@ const err = (error) => {
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['Authorization'] ='Bearer '+token
+    config.headers['Authorization'] = 'Bearer ' + token
   }
   return config
 }, err)
@@ -60,10 +60,10 @@ service.interceptors.request.use(config => {
  * 所有请求统一返回
  */
 service.interceptors.response.use((response) => {
-  if(response.request.responseType == 'blob'){
+  if (response.request.responseType === 'blob') {
     return response
   }
-  if(response.data.code === 1011009){
+  if (response.data.code === 1011009) {
     Modal.error({
       title: '提示：',
       content: response.data.message,
@@ -73,8 +73,7 @@ service.interceptors.response.use((response) => {
         window.location.reload()
       }
     })
-    return
-  }else if(response.data.code === 1011007){
+  } else if (response.data.code === 1011007) {
     Modal.error({
       title: '提示：',
       content: response.data.message,
@@ -84,24 +83,33 @@ service.interceptors.response.use((response) => {
         window.location.reload()
       }
     })
-    return
-  }else if(response.data.code === 1013002){
+  } else if (response.data.code === 1011008) {
+    Modal.error({
+      title: '提示：',
+      content: response.data.message,
+      okText: '重新登录',
+      onOk: () => {
+        Vue.ls.remove(ACCESS_TOKEN)
+        window.location.reload()
+      }
+    })
+  } else if (response.data.code === 1013002) {
     message.error(response.data.message)
     return response.data
-  }else if(response.data.code === 1016002){
+  } else if (response.data.code === 1016002) {
     message.error(response.data.message)
     return response.data
-  }else if(response.data.code === 1015002){
+  } else if (response.data.code === 1015002) {
     message.error(response.data.message)
     return //response.data
-  }else{
+  } else {
     return response.data
   }
 }, err)
 
 const installer = {
   vm: {},
-  install (Vue) {
+  install(Vue) {
     Vue.use(VueAxios, service)
   }
 }
