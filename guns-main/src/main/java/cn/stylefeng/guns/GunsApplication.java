@@ -25,6 +25,7 @@ Guns采用APACHE LICENSE 2.0开源协议，您在使用过程中，需要注意�
 package cn.stylefeng.guns;
 
 import cn.hutool.log.Log;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -34,6 +35,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author stylefeng
  * @date 2017/5/21 12:06
  */
+@MapperScan(value = "cn.stylefeng.guns.modular.dao")
 @SpringBootApplication
 public class GunsApplication {
 

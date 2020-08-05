@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.stylefeng.guns.modular.mapper.EmpMapper">
+    <resultMap id="empMap" type="cn.stylefeng.guns.modular.entity.SysEmpDo">
+        <id property="id" column="id"/>
+        <result property="jobNum" column="job_num"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+    </resultMap>
+    <select id="getEmp" resultMap="empMap">
+        SELECT *
+        FROM sys_emp
+        <where>
+            <if test="id!=0">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+    <insert id="addEmp" parameterType="cn.stylefeng.guns.modular.entity.SysEmpDo">
+        INSERT INTO sys_emp(id, job_num, org_id, org_name)
+        VALUES (id =#{id}, #{jobNum},#{orgId},#{orgName})
+    </insert>
+
+
+    <update id="updateEmp" parameterType="cn.stylefeng.guns.modular.entity.SysEmpDo">
+        UPDATE sys_emp
+        <set>
+            <if test="jobNum!=0">job_num = #{jobNum},</if>
+            <if test="orgId!=0">org_id = #{orgId},</if>
+            <if test="orgName!=null">org_name = #{orgName}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteEmp">
+        DELETE FROM sys_emp
+        WHERE id = #{id}
+    </delete>
+</mapper>

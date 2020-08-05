@@ -53,6 +53,7 @@ public interface SpringSecurityConstant {
             "/",
             "/login",
             "/logout",
+            "/test/*",
 
             //文件的
             "/sysFileInfo/upload",

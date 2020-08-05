@@ -26,8 +26,15 @@ package cn.stylefeng.guns.modular.controller;
 
 import cn.stylefeng.guns.core.pojo.response.ResponseData;
 import cn.stylefeng.guns.core.pojo.response.SuccessResponseData;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.stylefeng.guns.modular.entity.SysEmpDo;
+import cn.stylefeng.guns.modular.service.impl.SysEmpService2Impl2;
+import jdk.nashorn.internal.objects.annotations.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 一个示例接口
@@ -39,9 +46,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class ExampleController {
 
+    @Resource
+    SysEmpService2Impl2 sysEmpService;
+
+    private static final Logger log = LoggerFactory.getLogger(ExampleController.class);
+
     @RequestMapping("/niceDay")
     public ResponseData niceDay() {
+
         return new SuccessResponseData("nice day");
+    }
+    @GetMapping("/testGet")
+    public String getEmp(Long id) {
+        sysEmpService.getEmp(id);
+        log.info("running testGet");
+        return "ok";
+    }
+    @GetMapping("/testAdd")
+    public String addEmp(SysEmpDo dto) {
+        sysEmpService.addEmp(dto);
+        log.info("running testAdd");
+        return "ok";
+    }
+    @GetMapping("/testUpdate")
+    public List<SysEmpDo> updateEmp(SysEmpDo dto) {
+        log.info("update running");
+        sysEmpService.update(dto);
+        return sysEmpService.getEmp(dto.getId());
+
+    }
+    @GetMapping("/testDelete")
+    public String deleteEmp(Long id) {
+        log.info("delete running");
+        sysEmpService.delete(id);
+        return "ok";
     }
 
 }

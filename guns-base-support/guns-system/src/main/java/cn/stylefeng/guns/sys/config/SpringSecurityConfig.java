@@ -96,6 +96,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             httpSecurity.authorizeRequests().antMatchers(notAuthResource).permitAll();
         }
 
+
         //其余的都需授权访问
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
